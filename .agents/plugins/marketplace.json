@@ -1,0 +1,11 @@
+{
+  "name": "agent-discipline",
+  "interface": { "displayName": "agent-discipline" },
+  "plugins": [
+    {
+      "name": "agent-discipline",
+      "source": { "source": "local", "path": "./" },
+      "policy": { "installation": "AVAILABLE" }
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+interface:
+  display_name: "ad-commit"
+  short_description: "Commit from green, one meaning at a time"
+
+policy:
+  allow_implicit_invocation: false

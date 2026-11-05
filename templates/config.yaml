@@ -1,0 +1,4 @@
+runner: inline          # inline only in this version
+lenses: [structure]
+commit: never           # never | on-request | on-green
+commit_language: en     # language of commit subjects
