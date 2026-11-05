@@ -196,7 +196,7 @@ security と concurrency の汎用項目（たたき台）:
   - 基準: 3 本とも `run_error` が 0 件。サブエージェントの分の検算が合っている。
   - 証拠: `bench/local/results/results.jsonl`、ばらつき（費用の最小・最大）、`bench/criteria.md`。
 
-### フェーズ 1 — 配布の検証と、Claude のプラグインの最小版（完了。残: README と、push のあとの GitHub 経由の確認）
+### フェーズ 1 — 配布の検証と、Claude のプラグインの最小版（完了）
 進める順: ① 配布の検証 → ② 固定費と説明文の測定 → ③ 最小版の中身 → ④ 判定。①で前提が崩れたら、ここで計画を直す。
 
 - **① 配布の検証**（最小のプラグイン = 入口のスキル 1 つと手順 1 つ。手順の中に版の目印を書く）。Claude と Codex の両方で:
@@ -229,6 +229,7 @@ security と concurrency の汎用項目（たたき台）:
   - 止めたスキルは、両ツールともモデルのスキル一覧に載らない。ただし依頼文でキットの名前を出すと、モデルが設定ディレクトリを検索して見つけることがある（Codex で観測）。
   - `-c 'plugins."<id>".enabled=false'` は Codex の `exec` では効かなかった。比べるときは、プラグインを外した状態を基準にする。
   - `claude plugin details` が常時の費用の見積もり（~46 tok）を出すが、実測では 0 だった。見積もりではなく実測で判断する。
+  - **GitHub 経由（2026-11-06、`490b219`）:** `claude plugin marketplace add RSaiga/agent-discipline` → `claude plugin install agent-discipline@agent-discipline`、`codex plugin marketplace add RSaiga/agent-discipline` → `codex plugin add agent-discipline@agent-discipline` で入った。設定のないプロジェクトから `ad-review` を呼ぶと、両ツールともキャッシュのコピー（0.0.1）の手順を読み、`ad-init` を案内して止まった。
   - **結論:** 両ツールとも、根元をプラグインにした配布が成り立つ。入口のスキルの数は、自動起動を止めれば固定費にならない（段階ごとの入口を残しても費用はかからない）。
 
 - **② の結果（2026-11-05）:** キャッシュへの書き込みは、bench の不備ではなかった。システムプロンプトなどの前半（約 3.3 万）は、2 回目以降の実行では毎回キャッシュから読まれている。書き込みは会話の途中で足された内容で、次の 2 つだった。
