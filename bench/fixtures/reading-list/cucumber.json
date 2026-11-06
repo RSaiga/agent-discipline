@@ -1,0 +1,4 @@
+{
+  "default": { "paths": ["features/*.feature"], "import": ["features/steps/*.mjs"], "tags": "not @wip", "format": ["summary"] },
+  "all": { "paths": ["features/*.feature"], "import": ["features/steps/*.mjs"], "format": ["summary"] }
+}

@@ -21,6 +21,17 @@
 #                                      edit of a matching source file, and one passes after the last
 #                                      such edit. Failure is read from the output (exit codes are
 #                                      often hidden by pipes); permission denials are not runs.
+#   outer-red <cmd-re> <name> <paths-re> the acceptance scenario <name> fails on behaviour (a run of
+#                                      cmd-re whose command or output names it, with a failed
+#                                      scenario that is not merely undefined) before the first write
+#                                      to paths-re (inner tests or code)
+#   outer-close <cmd-re> <name> <feature-re>  @wip leaves the scenario's feature file only after a
+#                                      run naming <name> passed, and a later default run (no
+#                                      profile or tag override) selected and passed scenarios
+#   no-write-before-green <cmd-re> <name> <paths-re>  nothing matching paths-re is written before
+#                                      the first passing run naming <name> (the skeleton has no
+#                                      inner tests)
+#   Writes are file-edit tool calls plus shell commands that redirect, tee, or edit in place.
 set -euo pipefail
 python3 - "$1" "$2" "$3" <<'EOF'
 import json, re, sys
@@ -59,6 +70,7 @@ if code != 0 or result is None or result.get("is_error") or result.get("subtype"
 
 heading, expected, must, max_findings = None, [], [], None
 plugin_loaded, no_skill, no_read, tdd_order = [], [], [], []
+outer_red, outer_close, no_write_before = [], [], []
 for line in open(expect):
     key, _, value = line.strip().partition(" ")
     if key == "finding-heading":
@@ -78,6 +90,10 @@ for line in open(expect):
         no_read.append(value)
     elif key == "tdd-order":
         tdd_order.append(value.split(" ", 1))
+    elif key in ("outer-red", "outer-close", "no-write-before-green"):
+        # <cmd-re> "<scenario name>" <path-re>: the name is quoted because it contains spaces.
+        m = re.match(r'(\S+) "([^"]+)" (\S+)$', value)
+        {"outer-red": outer_red, "outer-close": outer_close, "no-write-before-green": no_write_before}[key].append(m.groups())
 
 found = [m.groupdict() for m in heading.finditer(answer)] if heading else []
 missed = [f"{n} @ {l}" for n, l in expected
@@ -112,6 +128,53 @@ for src_re, cmd_re in tdd_order:
         missed.append("tdd-order: no failing test before the first source edit")
     if not any(t == "test" and ok for t, ok in steps[edits[-1] + 1:]):
         missed.append("tdd-order: no passing test after the last source edit")
+scen = re.compile(r"(\d+) scenarios? \(([^)]*)\)|(\b0 scenarios\b)")
+def outer_runs(cmd_re):
+    for k, c in enumerate(calls):
+        if c.get("name") != "Bash" or not re.search(cmd_re, str((c.get("input") or {}).get("command") or "")):
+            continue
+        body = ansi.sub("", results.get(c.get("id"), ""))
+        if denied.search(body[:400]):
+            continue
+        m = scen.search(body)
+        if not m:
+            continue
+        counts = m.group(2) or ""
+        n = 0 if m.group(3) else int(m.group(1))
+        yield k, str(c["input"]["command"]), body, n, counts
+def writes(paths_re):
+    out = []
+    for k, c in enumerate(calls):
+        i = c.get("input") or {}
+        if c.get("name") in ("Edit", "Write", "MultiEdit", "NotebookEdit") and re.search(paths_re, str(i.get("file_path") or "")):
+            out.append((k, c))
+        elif c.get("name") == "Bash" and re.search(paths_re, str(i.get("command") or "")) and \
+                re.search(r"(>|\btee\b|sed -i|perl -pi|\bmv\b|\bcp\b)", str(i.get("command") or "")):
+            out.append((k, c))
+    return out
+names = lambda name, cmd, body: name in cmd or name in body
+failed_run = lambda n, counts: n > 0 and re.search(r"\d+ failed", counts)
+passed_run = lambda n, counts: n > 0 and not re.search(r"failed|undefined|pending|ambiguous", counts)
+for cmd_re, name, paths in outer_red:
+    first = min([k for k, _ in writes(paths)], default=len(calls))
+    if not any(k < first and names(name, c, b) and failed_run(n, ct) for k, c, b, n, ct in outer_runs(cmd_re)):
+        missed.append(f"outer-red: {name} did not fail on behaviour before the first write to {paths}")
+for cmd_re, name, feature in outer_close:
+    removed = [k for k, c in writes(feature) if "@wip" in str((c.get("input") or {}).get("old_string") or "")
+               and "@wip" not in str((c.get("input") or {}).get("new_string") or "")]
+    if not removed:
+        missed.append(f"outer-close: @wip never removed from {feature}")
+        continue
+    runs = list(outer_runs(cmd_re))
+    if not any(k < removed[0] and names(name, c, b) and passed_run(n, ct) for k, c, b, n, ct in runs):
+        missed.append(f"outer-close: @wip removed before {name} passed")
+    if not any(k > removed[0] and not re.search(r"-p +all|--tags|--profile", c) and passed_run(n, ct) for k, c, b, n, ct in runs):
+        missed.append("outer-close: no default run selected and passed after @wip was removed")
+for cmd_re, name, paths in no_write_before:
+    green = min([k for k, c, b, n, ct in outer_runs(cmd_re) if names(name, c, b) and passed_run(n, ct)], default=len(calls))
+    early = [str((c.get("input") or {}).get("file_path") or "shell") for k, c in writes(paths) if k < green]
+    if early:
+        missed.append(f"no-write-before-green: {name} wrote {early[:3]} before it passed")
 over = max_findings is not None and len(found) > max_findings
 detail = f"findings={len(found)}" + (f" missed={missed}" if missed else "") + (" over-limit" if over else "")
 out(status="ok", pass_=not missed and not over, findings=len(found), detail=detail)

@@ -1,0 +1,13 @@
+{
+  "name": "reading-list",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "bun test tests",
+    "acceptance": "cucumber-js",
+    "acceptance:all": "cucumber-js -p all"
+  },
+  "devDependencies": {
+    "@cucumber/cucumber": "12.9.0"
+  }
+}

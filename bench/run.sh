@@ -7,7 +7,9 @@
 #            RESULTS, MODEL, EFFORT, SETTING_SOURCES, [PRICES], [CLONE] (the clone's folder name, default
 #            repo; parallel runs use a WORKDIR and CLONE each, since some kits key state on the name)
 # task dir : prompt.txt, expect, [setup.sh <repo>], [check.sh <repo>], [claude.args.json],
-#            [cwd] (run from this path relative to the clone, e.g. a subdirectory or ../wt)
+#            [cwd] (run from this path relative to the clone, e.g. a subdirectory or ../wt),
+#            [teardown.sh <repo>] (runs after grading, whatever the outcome: stops what setup or the
+#            run left behind, such as a server or a process holding a port)
 #            check.sh grades the clone after the run and prints {"pass", ...}; both it and
 #            expect must pass.
 # variant  : [install.sh <repo>], [claude.args.json], [kit] (a checkout whose commit is recorded),
@@ -120,6 +122,7 @@ for rep in $(seq 1 "$repeat"); do
     if [ -x "$task/check.sh" ] && [ "$(python3 -c 'import json,sys; print(json.loads(sys.argv[1])["status"])' "$grade")" = ok ]; then
       check="$("$task/check.sh" "$work/$CLONE" 2> "$RESULTS/out/$id.check.stderr" || echo '{"pass": false, "error": "check.sh failed"}')"
     fi
+    [ -x "$task/teardown.sh" ] && { "$task/teardown.sh" "$work/$CLONE" || echo "teardown failed: $task" >&2; }
     python3 - "$raw" "$grade" "$id" "$(basename "$task")" "$(basename "$vdir")" "$rep" \
       "$COMMIT" "$(kit_commit "$vdir")" "$PRICES" "$RESULTS/out/$id.args" "$check" >> "$RESULTS/results.jsonl" <<'EOF'
 import json, os, sys

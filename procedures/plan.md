@@ -82,7 +82,7 @@ Keep the existing-test inventory in the list itself, with a reason for every "un
 ## 7. 止まる / Stop
 
 「モード / シナリオ n 本 / 内側 m 件 / 今回やらない k 件」と完了の条件、リストの置き場を報告する。
-次は、単層なら `ad-cycle` か `ad-red`。二重ループは、今の版ではまだ回せないことを伝える。
+次は、単層なら `ad-cycle` か `ad-red`、二重ループなら `ad-accept`（通しの `ad-cycle` は、今の版では単層だけ）。
 
 **しないこと / Never:** テストや実装を書くこと、実装の方針を決め込むこと（設計は green と refactor で決まる）、境界や例外の変種を外側に積むこと、
 使われていない経路をリストに入れること、出典の無い項目、承認の前に書くこと、今あるリストを聞かずに置き換えること。

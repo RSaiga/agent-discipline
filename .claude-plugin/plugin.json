@@ -1,6 +1,6 @@
 {
   "name": "agent-discipline",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Development discipline for AI coding agents: perspective checks (lenses) and the flows that call them.",
   "author": { "name": "RSaiga" },
   "license": "MIT"

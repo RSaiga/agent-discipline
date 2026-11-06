@@ -19,11 +19,13 @@ At its core are **lenses**: read a change from a fixed perspective and return na
 | `ad-review` | 作業中の変更を structure の観点（code smell）で読む。読むだけ / Reviews the working change through the structure lens. Read-only |
 | `ad-plan` | 変更のテストのリストを作る（モード、シナリオ、内側の項目、変わる既存のテスト）。承認のあとで、リストだけを書く / Plans the test list; writes only the list, after approval |
 | `ad-cycle` | テストのリストが尽きるまで、red → green → コミット → refactor を回す（単層） / Runs the single-layer TDD loop until the test list is done |
+| `ad-accept` | 二重ループの外側の 1 手: 受け入れシナリオを書いて振る舞いで落とす、または走らせて緑なら閉じる / One outer-loop step: write the acceptance scenario and watch it fail, or run it and close it when green |
 | `ad-red` `ad-green` `ad-refactor` `ad-commit` | TDD の 1 段階だけを行う / Runs one TDD stage |
 | `ad-retro` | 意図・結果・止まった箇所を `findings.md` に残す / Records intent, result and where it stopped |
 
-TDD は今、外側の受け入れテストを持たない **単層**（不具合の修正、画面の流れを変えない変更）だけを扱う。二重ループ、acceptance などの観点、ほかの runner は `PLAN.md` の順に足していく。
-TDD currently runs the single-layer loop only. The double loop, more lenses and other runners follow the order in `PLAN.md`.
+TDD は、外側の受け入れテストを持たない **単層** と、受け入れテストを外側に置く **二重ループ** を扱う。二重ループは今、段階ごとの入口（`ad-accept` → `ad-red` / `ad-green` → …）で回す。通しの `ad-cycle` で回せるのは単層だけ。
+acceptance などの観点、ほかの runner は `PLAN.md` の順に足していく。
+TDD runs the single layer and the double loop; the double loop runs stage by stage for now, and `ad-cycle` runs single-layer lists only.
 
 どの入口も自動では起動しない。明示的に呼んだときだけ動く。 / No entry starts on its own; each runs only when invoked.
 
@@ -105,6 +107,8 @@ The adoption criteria are in `bench/criteria.md`. Target-specific tasks and resu
 ```
 bench/tests/flow.sh        # run.sh の通し（偽の CLI）/ end-to-end check with a fake CLI
 bench/tests/tdd-order.sh   # TDD の順番の採点 / the TDD order grader
+bench/tests/outer-order.sh # 外側のループの順番の採点 / the outer-loop order grader
+bench/fixtures/            # 外側の段階を確かめる練習用のプロジェクト / a practice project for the outer-loop stages
 ```
 
 ## 計画 / Plan

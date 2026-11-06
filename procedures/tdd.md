@@ -1,12 +1,16 @@
 # tdd — TDD の共通の規律 / Shared TDD discipline
 
-TDD の入口（`ad-plan`、`ad-cycle`、`ad-red`、`ad-green`、`ad-refactor`、`ad-commit`）が、`discipline.md` のあとに読む。
-リストを作るのは `plan.md`、各段階の手順は `red.md`・`green.md`・`refactor.md`・`commit.md`、通しの流れは `cycle.md` にある。
+TDD の入口（`ad-plan`、`ad-cycle`、`ad-accept`、`ad-red`、`ad-green`、`ad-refactor`、`ad-commit`）が、`discipline.md` のあとに読む。
+リストを作るのは `plan.md`、外側の段階は `accept.md`、内側の段階は `red.md`・`green.md`・`refactor.md`・`commit.md`、通しの流れは `cycle.md` にある。
 Every TDD entry reads this after `discipline.md`. Stage procedures live in their own files.
 
-今の版が扱うのは**単層**（内側のループだけ。不具合の修正、画面の流れを変えない小さな変更、単体の粒度の変更）。
-受け入れテストを外側に置く二重ループは、まだ扱わない。リストが二重ループの形なら、そう伝えて止まる。
-This version runs the single-layer loop only. If the list is a double-loop list, say so and stop.
+段階ごとの入口は、単層と二重ループ（受け入れテストを外側に置く）の両方を扱う。通しの `ad-cycle` は、今の版では単層だけを回す
+（二重ループのリストなら、そう伝えて、段階ごとの入口を案内して止まる）。
+Stage entries handle both the single layer and the double loop; `ad-cycle` runs single-layer lists only in this version.
+
+**二重ループ:** 外側は受け入れシナリオ 1 本、内側はそれを緑にするための項目。シナリオごとに、外側を書いて振る舞いで落とす（accept）→
+内側を red → green → refactor で 1 件ずつ → 内側が尽きたら外側を走らせる（accept）。外側の失敗が、次に足りない振る舞いを 1 つ示す。
+新しい機能の最初のシナリオは**最初の通り道**（`[skeleton]`）: 外側の 1 本だけで、全部の層を最も薄くつなぐ。内側のテストは書かない。
 
 ## 絶対の規則 / Hard rules
 
@@ -15,6 +19,7 @@ This version runs the single-layer loop only. If the list is a double-loop list,
 2. **テストを消さない・飛ばさない・期待値を緩めない。** 落ちているテストは情報である。例外は、リストの `[change]`・`[remove]` の項目だけ
    （承認された仕様の変更を出典に、red で既存のテストを書き換える・消す）。
    Never delete, skip, or weaken a test. Only `[change]` / `[remove]` items, backed by an approved spec change, may, in RED.
+   もう 1 つの例外は、外側が緑になった直後の**外側の棚卸し**（`refactor.md`）。
 3. **その段階に要るファイルだけを触る。** / Touch only what the stage needs.
 4. **段階の最後に、実際にテストを走らせて、生の結果を報告する。** 「通るはず」で終えない。走らせる範囲は下の「どこまで走らせるか」。
    End every stage with a real test run and its actual output.
@@ -36,7 +41,8 @@ Project-specific facts come from the profile's `tdd` block; never guess what it 
 | `tdd.known_failures` | 最初から落ちていて構わないテスト（スイート・テストの名前・条件）。**ここに名前のあるものだけ**を除く。無ければ `none` |
 | `tdd.hooks` | コミットのフックがすること（lint・整形・整形したファイルのステージのし直しなど）。無ければ `none` |
 | `tdd.rules` | 着手の前に一度だけ読む、プロジェクトの規約。自動で読み込まれるものは書かない |
-| `tdd.acceptance` | 受け入れテストの形式・置き場所・お手本（`plan.md` が使う）。持たないプロジェクトは `none` |
+| `tdd.acceptance` | 受け入れテストの `format`・`path`・`example`、進行中のタグを含めて 1 本だけ走らせる `run_one`（`<name>` を置き換える）、タグを外したあとの既定の実行 `run_default`、選ばれた件数の読み方 `selected`。持たないプロジェクトは `none` |
+| `tdd.stack` | 受け入れテストが要るスタックの `up`（準備ができたかの確かめ方と待つ上限を含む）・`status`・`down`・`restart_when`（どの変更で何を再起動するか）・`migrate`・`reset`（テスト用のデータを空にする方法と確かめ方）・`owner`（自分が起動したものの見分け方）・`failure_artifacts`（失敗の記録の場所）。スタックが要らなければ `none` |
 
 ## テストのリスト / The test list
 
@@ -62,13 +68,18 @@ Project-specific facts come from the profile's `tdd` block; never guess what it 
   ```
 - **印:** `[ ]` 未着手、`[~]` 着手中（red が付ける）、`[x]` 緑（green が付ける）。種類は ZOMBIES の頭文字（`[O/B]` など）か、
   既存のテストを書き換える `[change]`、廃止する振る舞いのテストを消す `[remove]`。
-- **項目を勝手に足さない。** 新しく要る振る舞いに気づいたら、報告して、足すかどうかはユーザーが決める。
-  Never add items yourself; report and let the user decide.
+- **二重ループのリスト**は `## 受け入れシナリオ` の下にシナリオ（`### [ ] A<n> <名前>`）を並べ、その下に内側の項目を置く（形式は `plan.md`）。
+  シナリオの印: `[ ]` 未着手、`[~]` 進行中のタグを付けて書き、振る舞いで落ちるのを見た、`[x]` 緑になってタグを外した。**進行中の `[~]` のシナリオは常に 1 本だけ。**
+  内側の項目は、進行中のシナリオの下から取る。
+- **項目を勝手に足さない。** 新しく要る振る舞いに気づいたら、報告して、足すかどうかはユーザーが決める。例外は 1 つだけ:
+  承認されたシナリオの外側の失敗が示す、足りない振る舞いを 1 件、そのシナリオの内側に足す（`accept.md`。出典は「シナリオ A<n> の失敗」）。
+  Never add items yourself — except the one inner item `accept.md` derives from an approved scenario's outer failure.
 
 ## どこまで走らせるか / How much to run
 
 | 段階 | 範囲 |
 |---|---|
+| accept | 外側のシナリオ 1 本だけ（`run_one`）。閉じるときは、タグを外してから既定の実行（`run_default`） |
 | red | 書いたテスト 1 本だけ（`one`） |
 | green | ① そのテスト → ② `fast` のスイートは全体（`all`）と `tdd.checks` → ③ `slow` のスイートは触ったパスだけ |
 | refactor | 1 手ごとに、その手が触った範囲。段階の最後に green の②③ |
@@ -77,6 +88,21 @@ Project-specific facts come from the profile's `tdd` block; never guess what it 
 - 同じ作業ツリーで、直前の段階が同じ範囲を走らせて結果がまだ有効なら、走らせ直さない（省いたことと、どの結果を使ったかを書く）。
 - lint と整形は、`tdd.hooks` がするならフックに任せる。
 - `tdd.known_failures` に名前のある失敗だけを除く。それ以外の、作業と関係のないテストが落ちたら止まる。
+- **選ばれた件数を必ず確かめる。** 成功で終わっても、選ばれたテストが 0 件なら、それは緑ではない。`selected` の読み方で件数を確かめ、
+  0 件なら止まって報告する（走らせ方が対象を選べていない）。
+  A run that selected nothing is not green, whatever its exit code.
+
+## スタック / The stack
+
+受け入れテストがスタックを要るときの約束。コマンドは `tdd.stack` から読む。
+- **自分が起動したものだけを使い回し、止める。** 起動の前に `status` を見る。ポートを他のプロセスが使っていたら、**止めずに**報告して止まる。
+  自分のものでないプロセスを止めない。
+  Reuse and stop only what you started; if another process holds the port, report and stop — never stop it.
+- **準備ができたかを確かめてから走らせる。** `up` が待つ上限のうちに準備ができなければ、報告して止まる。
+- **変更のあとは `restart_when` のとおりに再起動し、`migrate` を当ててから**走らせる。古いコードに対して走らせた結果を使わない。
+- **データの残りを疑う。** 外側の失敗が前の実行の残りに見えたら、`reset` で空にして走らせ直して切り分ける。
+- **片付け:** リストが尽きたとき、止まるとき、中断するときは、自分が起動したスタックを `down` で止め、止めたことを報告する。
+  段階の入口を 1 つだけ呼ばれたときは、次の段階で使えるよう動かしたままにしてよい（そのことを報告に書く）。
 
 ## 報告 / Report
 
