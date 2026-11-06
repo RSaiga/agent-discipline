@@ -17,6 +17,7 @@ At its core are **lenses**: read a change from a fixed perspective and return na
 |---|---|
 | `ad-init` | プロジェクトを読んで `.agent-discipline/` の設定を下書きし、了承を得てから書く / Drafts the project settings and writes them after you agree |
 | `ad-review` | 作業中の変更を structure の観点（code smell）で読む。読むだけ / Reviews the working change through the structure lens. Read-only |
+| `ad-plan` | 変更のテストのリストを作る（モード、シナリオ、内側の項目、変わる既存のテスト）。承認のあとで、リストだけを書く / Plans the test list; writes only the list, after approval |
 | `ad-cycle` | テストのリストが尽きるまで、red → green → コミット → refactor を回す（単層） / Runs the single-layer TDD loop until the test list is done |
 | `ad-red` `ad-green` `ad-refactor` `ad-commit` | TDD の 1 段階だけを行う / Runs one TDD stage |
 | `ad-retro` | 意図・結果・止まった箇所を `findings.md` に残す / Records intent, result and where it stopped |

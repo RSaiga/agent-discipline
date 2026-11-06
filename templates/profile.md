@@ -20,6 +20,7 @@ tdd:
   known_failures: none
   hooks: none
   rules: none
+  acceptance: none
 ---
 
 # Project notes

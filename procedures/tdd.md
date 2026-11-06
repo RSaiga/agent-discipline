@@ -1,7 +1,7 @@
 # tdd — TDD の共通の規律 / Shared TDD discipline
 
-TDD の入口（`ad-cycle`、`ad-red`、`ad-green`、`ad-refactor`、`ad-commit`）が、`discipline.md` のあとに読む。
-各段階の手順は `red.md`・`green.md`・`refactor.md`・`commit.md`、通しの流れは `cycle.md` にある。
+TDD の入口（`ad-plan`、`ad-cycle`、`ad-red`、`ad-green`、`ad-refactor`、`ad-commit`）が、`discipline.md` のあとに読む。
+リストを作るのは `plan.md`、各段階の手順は `red.md`・`green.md`・`refactor.md`・`commit.md`、通しの流れは `cycle.md` にある。
 Every TDD entry reads this after `discipline.md`. Stage procedures live in their own files.
 
 今の版が扱うのは**単層**（内側のループだけ。不具合の修正、画面の流れを変えない小さな変更、単体の粒度の変更）。
@@ -36,6 +36,7 @@ Project-specific facts come from the profile's `tdd` block; never guess what it 
 | `tdd.known_failures` | 最初から落ちていて構わないテスト（スイート・テストの名前・条件）。**ここに名前のあるものだけ**を除く。無ければ `none` |
 | `tdd.hooks` | コミットのフックがすること（lint・整形・整形したファイルのステージのし直しなど）。無ければ `none` |
 | `tdd.rules` | 着手の前に一度だけ読む、プロジェクトの規約。自動で読み込まれるものは書かない |
+| `tdd.acceptance` | 受け入れテストの形式・置き場所・お手本（`plan.md` が使う）。持たないプロジェクトは `none` |
 
 ## テストのリスト / The test list
 
