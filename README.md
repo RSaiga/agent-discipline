@@ -16,7 +16,7 @@ At its core are **lenses**: read a change from a fixed perspective and return na
 | 入口 / Entry | すること / What it does |
 |---|---|
 | `init` | プロジェクトを読んで `.agent-discipline/` の設定を下書きし、了承を得てから書く / Drafts the project settings and writes them after you agree |
-| `review` | 作業中の変更を観点で読む（structure・security・concurrency・acceptance）。読むだけ / Reviews the working change through the lenses. Read-only |
+| `review` | 観点で読む（structure・security・concurrency・isolation・acceptance）。対象は作業中の変更、ブランチか範囲、プルリクエストの URL、ファイルかディレクトリ。読むだけ / Reviews through the lenses: the working change, a branch or range, a pull request URL, or files and directories. Read-only |
 | `tdd-plan` | 変更のテストのリストを作る（モード、シナリオ、内側の項目、変わる既存のテスト）。大きな依頼は先にストーリーに分ける。承認のあとで書く / Plans the test list, splitting large requests into stories first; writes after approval |
 | `tdd-cycle` | テストのリストが尽きるまで回す。単層なら red → green → コミット → refactor、二重ループならシナリオごとに外側と内側を回す / Runs the TDD loop until the list is done, single layer or double loop |
 | `tdd-accept` | 二重ループの外側の 1 手: 受け入れシナリオを書いて振る舞いで落とす、または走らせて緑なら閉じる / One outer-loop step: write the acceptance scenario and watch it fail, or run it and close it when green |
