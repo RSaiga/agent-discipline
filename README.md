@@ -103,7 +103,7 @@ skills/       入口のスキル。短く、procedures/ の手順を読んで実
 procedures/   手順の本文（共通の規律、review、TDD の各段階など）/ the procedures
 lenses/       観点の本文 / the lenses
 agents/       観点を新しい文脈で動かす担当（Claude 用）/ fresh-context lens runners (Claude)
-examples/     言語パック（直し方の見本）/ language packs (remedy examples)
+examples/     言語パック（直し方の見本。TypeScript・Rust・Go・Python・Java/Kotlin・PHP・Ruby・C#）/ language packs (remedy examples)
 templates/    profile.md と config.yaml の雛形 / templates for the project settings
 bench/        費用と結果を測る仕組み / the measurement harness
 ```

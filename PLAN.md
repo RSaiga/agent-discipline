@@ -495,6 +495,10 @@ security と concurrency の汎用項目（たたき台）:
   （security＝外から呼ばれる口、concurrency＝非同期・DB の書き込み・ジョブ・キャッシュ、isolation＝テナントか共有されるテストの資源、acceptance＝受け入れテスト）。
   観点を足すほど review の費用が増えることも書く。評価: Go のサービスで 3/3（5 つとも入れる案）、練習用のプロジェクトで 3/3（5 つとも。isolation は受け入れテストが共有の DB を使うため）。
 
+- **言語パックを 8 つに**（2026-11-07）: TypeScript・Rust に isolation の見本を足し、Go・Python・Java（Kotlin も同じ書き方で読める）・PHP・Ruby・C# を
+  security・concurrency・isolation の 3 つで作った。架空の苗の注文の題材で、❌ と ✅ を対にした直し方の見本（要件ではない）。
+  bench で使ったのは TypeScript だけ（isolation の見本を入れても isolation の課題 3/3）。ほかは「bench では未検証」と各ファイルに書いた。
+
 GitHub への public 作成と push はユーザーが行う（またはユーザーの明示の指示で行う）。
 
 ## リスク
