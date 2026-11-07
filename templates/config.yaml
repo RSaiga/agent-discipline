@@ -5,3 +5,6 @@ router: none            # none | inert (skip security/concurrency on comment-onl
 commit: never           # never | on-request | on-green
 commit_language: en     # language of commit subjects
 commit_style: conventional  # conventional (<type>(<scope>): <subject>) | history (match the last 20 subjects)
+# second_opinion_commands:  # candidates for --second (review, tdd-plan); the first whose program is not the running tool is used
+#   - ["codex", "exec", "--ephemeral", "--sandbox", "read-only", "-C", "{root}"]
+#   - ["claude", "-p", "--permission-mode", "plan"]

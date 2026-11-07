@@ -56,6 +56,8 @@ Write no code and no tests. The only file you may write is this branch's test li
 見せるもの: モードとその理由、洗い出した既存のテスト（それぞれ `[change]`・`[remove]`・影響なしと理由。6 の「既存のテスト」の節にそのまま残す）、シナリオ（二重ループのとき）、
 内側の各項目（振る舞い 1 文・境界・出典）、今回やらないことと理由、完了の条件、ZOMBIES の網羅（Z/O/M/B/E ごとに、対応する項目か「該当なし」と理由）。
 
+呼び出しに `--second` があれば、見せる前に `second-opinion.md` の「tdd-plan で」に従う（別の AI の指摘と、それへの返答を下書きと合わせて見せる）。
+
 **承認を待つ。** 承認がなければ、書かずに止まる。承認の範囲は見せた下書きそのもので、見せていない変更を足さない。
 依頼の中で、確認を待たずに書くよう明示されていれば、それを承認とみなす（`discipline.md` の優先順位の 1）。
 Wait for approval; without it, stop without writing. An explicit instruction in the request to write without waiting counts as approval.

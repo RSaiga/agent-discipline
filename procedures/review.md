@@ -46,6 +46,8 @@ Read-only throughout. Fixing is not part of review.
   ファイルかディレクトリを対象にするときは、すべての行が対象。
   For a change, focus on changed lines and never flag untouched code; for files or directories, every line is in scope.
 - 対象が 0 件なら、そう報告して `## LENS CLEAN` で終える。
+- 呼び出しに `--second` があれば、`second-opinion.md` の「review で」に従い、別の AI にも同じ対象を読ませて突き合わせる。
+  With `--second`, also follow `second-opinion.md` (review).
 
 ## 2. 観点を選ぶ / Route
 

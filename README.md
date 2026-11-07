@@ -125,6 +125,34 @@ The lenses run according to `runner` in `config.yaml`.
 Misses were equal, so the cheapest form is the default. A smaller `runner_model` adds to the parent's cost rather than replacing it.
 With `command`, the diff is sent to that service.
 
+### セカンドオピニオン / A second opinion
+
+`review` と `tdd-plan` に `--second` を付けると、別の AI にも読ませる。
+Add `--second` to `review` or `tdd-plan` to have another AI read it too.
+
+```
+/agent-discipline:review develop...HEAD --second
+/agent-discipline:tdd-plan <依頼 / request> --second
+```
+
+```yaml
+# config.yaml
+second_opinion_commands:
+  - ["codex", "exec", "--ephemeral", "--sandbox", "read-only", "-C", "{root}"]
+  - ["claude", "-p", "--permission-mode", "plan"]
+```
+
+- 候補を上から見て、**自分を動かしているツールと同じプログラムは飛ばす**。同じ設定のまま、どちらのツールから呼んでも「もう片方」が 2 人目になる。
+  The first candidate whose program is not the running tool is used, so one shared config works from either tool.
+- `review`: 2 人目には 1 人目の結論を渡さず、同時に読ませる。指摘を組にして `［両方］`・`［1 人目だけ］`・`［2 人目だけ・確かめられた／確かめられない］` の印を付ける。どの指摘も消さない。
+  `review`: the second reads in parallel without the first's findings; findings are paired and tagged, never dropped.
+- `tdd-plan`: 下書きができてから、2 人目が抜けと誤りを探す。1 人目が指摘ごとに採用か不採用かを答え、いつもどおり承認を待つ。
+  `tdd-plan`: after the draft, the second looks for gaps; the first answers each point, then waits for approval as usual.
+- 2 人目が止まっても（起動できない、10 分で終わらない）、1 人目の結果は使い、止まったことを報告に書く。差分は 2 人目のサービスに送られる。
+  If the second stops, the first's result stands and the stop is reported. The diff is sent to the second's service.
+- 実行環境のサンドボックスが外のコマンドを止めるときは、ツールのふつうのやり方で許可を求める（対話なしの実行では起動できない）。
+  If a sandbox blocks the command, the tool asks for permission; non-interactive runs cannot start it.
+
 **規律の優先順位 / Precedence:** その場のユーザーの指示 → `config.yaml` → プロジェクトのルール → キットの規律。
 The user's instruction in the moment, then `config.yaml`, then the project's rules, then the kit.
 
