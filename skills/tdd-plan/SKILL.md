@@ -1,6 +1,6 @@
 ---
 name: tdd-plan
-description: Plan the TDD test list for a change (mode, scenarios, inner items, existing tests to change). Writes only the list, after approval.
+description: Plan the TDD test list for a change (mode, scenarios, inner items, existing tests to change). Writes only the list, after approval. Add --second for a second opinion from another AI.
 disable-model-invocation: true
 ---
 
@@ -12,8 +12,8 @@ disable-model-invocation: true
 
 次の往復で、`.agent-discipline/lists/<ブランチ>.md`（ブランチ名の `/` は `-`。無くてよい）と `profile.md` の `tdd.rules` の規約 をまとめて読む。どれもファイルとして 1 回だけ開く（リストはあとで書き換える。シェルの出力で読んだものを開き直さない）。
 
-そのあと、動く条件を確かめてから `procedures/plan.md` を実行する。呼び出しに続く文字列は、計画の対象と、その場の指示として扱う。
+そのあと、動く条件を確かめてから `procedures/plan.md` を実行する。呼び出しに続く文字列は、計画の対象と、その場の指示として扱う。`--second` があれば、それを対象から外し、`procedures/second-opinion.md` も読んで従う。
 
 In the first turn, together: read `procedures/discipline.md`, `procedures/tdd.md`, `procedures/plan.md`, and run the command above in the project's current directory, not the plugin
 (re-read with the root path only if the current directory is not the root). In the next turn, read the test list `.agent-discipline/lists/<branch>.md` if any (`/` in the branch name becomes `-`) and the `tdd.rules` files, together — each opened once as a file (the list is edited later; never re-open what a shell command already printed). Then check the activation conditions and run
-`procedures/plan.md`. Any text after the invocation is the planning target and the user's instruction.
+`procedures/plan.md`. Any text after the invocation is the planning target and the user's instruction; `--second` is not part of it and means: also follow `procedures/second-opinion.md`.
