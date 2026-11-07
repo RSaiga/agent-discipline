@@ -1,0 +1,31 @@
+name: bench-tests
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  bench-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Grader and runner tests
+        run: |
+          set -e
+          for t in bench/tests/*.sh; do
+            echo "::group::$t"
+            bash "$t"
+            echo "::endgroup::"
+          done
+      - name: Public text stays tool-neutral
+        run: |
+          # Procedures, lenses, examples, templates and entry bodies must not name a tool or a local path
+          # (the plugin-root line in each entry is the one allowed exception).
+          if grep -rnE '/Users/|\.claude/|\.codex/|Claude Code|Codex' procedures lenses examples templates skills/*/SKILL.md | grep -v CLAUDE_PLUGIN_ROOT; then
+            echo "tool-specific words found" >&2; exit 1
+          fi
