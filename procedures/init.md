@@ -27,8 +27,16 @@ Write only inside `<root>/.agent-discipline/`. Never change Git config, `.gitign
      - `selected` に、選ばれた件数の読み方と、0 件のときの出力（終了コードが 0 のままか）を書く。
      Fill every acceptance and stack key from the project's scripts: the in-progress marker, a `run_one` the tool can actually do, and how zero selected looks.
    - `commit_language`（`config.yaml`）: 既存のコミットの件名の言語。
-   - `lenses`（`config.yaml`）: `structure`（カタログがあるか、汎用のカタログを置いたとき）。`tdd.acceptance` が `none` でなければ、
-     `acceptance` を足す案を下書きに含める（外側のシナリオを閉じるたびに新しい文脈を 1 つ起動するので、その分の費用が増えると伝える）。
+   - `lenses`（`config.yaml`）: 使える観点を**すべて**下書きに並べ、プロジェクトを読んで、観点ごとに「入れる案／入れない案」と根拠（見つけたファイル）を書く。
+     | 観点 | 入れる案にする目安 |
+     |---|---|
+     | `structure` | 常に（カタログがあるか、汎用のカタログを置いたとき） |
+     | `security` | 外から呼ばれる口がある（HTTP のルート・CLI の入力・Webhook・メッセージの受け口） |
+     | `concurrency` | 非同期の処理、DB への書き込み、ジョブ・定期実行、プロセス内のキャッシュがある |
+     | `isolation` | テナント（組織・利用者ごとのデータ）がある、またはテストが DB・ファイル・環境変数を共有している |
+     | `acceptance` | `tdd.acceptance` が `none` でない（外側のシナリオを閉じるたびに新しい文脈を 1 つ起動する） |
+     観点を足すほど `review` の費用が増えることを、下書きに 1 行で書く。目安に当たらない観点も「入れない案」として理由つきで並べる（黙って落とさない）。
+     List every lens in the draft with a proposed on/off and the evidence; note that each lens adds review cost.
    Fill values from the project itself; leave unknowns empty and say so — never invent a catalog, a command, or a known failure.
 4. **下書きを見せて、ユーザーの了承を得てから書く。** / Show the draft; write only after the user agrees.
 5. **個人用か共有かを聞く。**
