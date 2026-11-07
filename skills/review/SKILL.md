@@ -1,6 +1,6 @@
 ---
 name: review
-description: Review through the lenses, read-only. No argument reviews the working change; a branch or commit range reviews that diff; files or directories review the code itself.
+description: Review through the lenses, read-only. No argument reviews the working change; a branch, commit range or pull request URL reviews that diff; files or directories review the code itself.
 disable-model-invocation: true
 ---
 

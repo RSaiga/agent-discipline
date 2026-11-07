@@ -7,15 +7,26 @@ Read-only throughout. Fixing is not part of review.
 
 ## 1. 対象を決める / Scope
 
-呼び出しの指定で、対象と読み方が 3 つに分かれる。 / The invocation picks one of three targets.
+呼び出しの指定で、対象と読み方が 4 つに分かれる。 / The invocation picks one of four targets.
 
 | 指定 | 対象 | 見るところ |
 |---|---|---|
 | なし | 作業中の変更（コミット済み・未ステージ・ステージ済みを合わせたもの） | 変更した行 |
 | ブランチ名かコミットの範囲（`main..HEAD`・`HEAD~3..`・PR のブランチ） | その範囲の差分（実装したあとのレビュー） | 変更した行 |
+| プルリクエストの URL | そのプルリクエストの差分（手元に取り込まずに読む） | 変更した行 |
 | ファイルかディレクトリ | **そのコード全体**（コードのレビュー。変更に限らない） | ファイルのすべての行 |
 
 - ブランチ名かコミットの範囲なら、下のコマンドの `<diff_base>` と作業中の差分の代わりに、その範囲の `git diff --name-only <範囲>` と `git diff <範囲>` を使う。
+- プルリクエストの URL なら、URL から番号を取り、それを参照する名前に直す（`/pull/<番号>` は `pull/<番号>/head`、
+  `/merge_requests/<番号>` は `merge-requests/<番号>/head`）。どちらの形でもなければ、ブランチ名か範囲で指定し直すよう伝えて止まる。
+  `git remote -v` から、URL のホストとリポジトリに合うリモートを選ぶ（無ければ止まる）。次の 1 つのコマンドで取り込む:
+  ```
+  git fetch -q <リモート> <diff_base> && git fetch -q <リモート> <参照する名前> && git rev-parse FETCH_HEAD
+  ```
+  出てきたコミットを `<先頭>` として、範囲 `<リモート>/<diff_base>...<先頭>` で上の範囲と同じに読む。作業ツリーは変えない（checkout しない）。
+  周りの文脈も作業ツリーではなく `git show '<先頭>:<パス>'` で読む（作業ツリーは別のブランチのことがある）。
+  比べる先は `diff_base` と見なす。プルリクエストが別のブランチに向いているなら、要約にそう書き、範囲で指定し直せることを添える。
+  For a pull/merge request URL, fetch its head ref without checking out, review `<remote>/<diff_base>...<head>`, and read context with `git show`, not the working tree.
 - ファイルかディレクトリなら、差分ではなくファイルそのものを読む。`profile.md` の `code` に当てはまるファイルが 30 を超えるなら、
   分け方（フォルダごと、機能ごと）を示して止まる（一度に読むと、どの観点も浅くなる）。`acceptance` は対象にしない（リストのシナリオがあるときだけの観点）。
 - 指定がなければ、作業中の変更を対象にする。
