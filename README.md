@@ -39,8 +39,7 @@ TDD runs the single layer and the double loop, end to end with `tdd-cycle` or st
 acceptance は `tdd-accept` がシナリオを閉じる前にかけ、破れていれば内側の項目に戻す。security と concurrency の確信度「高」には、破れる入力か壊れる順番を必ず添える。
 `config.yaml` で選べるもの: `runner`（`inline` 既定・`subagent`・`command`）、`router`（`none` 既定・`inert`）、`backlog`（`none` 既定・`file`）。
 The acceptance lens runs before a scenario closes. High-confidence security/concurrency findings always come with a breaking input or interleaving.
-`runner: command` runs lenses through another CLI, e.g. Codex: `runner_command: ["codex", "exec", "--ephemeral", "--sandbox", "read-only", "-C", "{root}"]`
-(the prompt goes on stdin).
+使う AI の選び方は「使う AI」の節にある。 / See "Which AI runs" for choosing the AI.
 
 どの入口も自動では起動しない。明示的に呼んだときだけ動く。 / No entry starts on its own; each runs only when invoked.
 
@@ -93,6 +92,39 @@ codex plugin add agent-discipline@agent-discipline
 項目の意味は `templates/` の雛形と、`procedures/discipline.md`・`procedures/tdd.md` の表にある。
 The keys are described by the templates in `templates/` and the tables in `procedures/discipline.md` and `procedures/tdd.md`.
 
+### 使う AI / Which AI runs
+
+**手順を進める AI は、キットを呼んだツールのもの。** キットの設定では選ばない。Claude Code なら `/model`、Codex ならそのモデルの設定で変える。
+The AI that runs the procedure is the one in the tool you invoked from; change it there, not in the kit.
+
+**観点を読む AI は、`config.yaml` の `runner` で決まる。**
+The lenses run according to `runner` in `config.yaml`.
+
+| `runner` | 観点を読むもの / Who reads | 設定の例 / Example |
+|---|---|---|
+| `inline`（既定 / default） | 同じ AI が、同じ文脈で順に / the same AI, in the same context | `runner: inline` |
+| `subagent` | 同じツールの別の担当が、新しい文脈で。`runner_model` でモデルを選べる（無ければ同じ） / a fresh-context agent of the same tool; `runner_model` picks its model | `runner: subagent`<br>`runner_mode: parallel`<br>`runner_model: sonnet` |
+| `command` | 外のコマンド（別のツールの CLI）。プロンプトは標準入力で渡す / another CLI, prompt on stdin | `runner: command`<br>`runner_command: ["codex", "exec", "--ephemeral", "--sandbox", "read-only", "-C", "{root}"]` |
+
+`runner_mode` は `parallel`（観点ごとに同時に。既定）か `combined`（1 つの担当にまとめて）。
+`acceptance` だけは `runner` に関わらず、毎回新しい文脈で動く（書いた本人の結論を持ち込まないため）。
+`runner_mode` is `parallel` (default) or `combined`. `acceptance` always runs in a fresh context, whatever `runner` says.
+
+**おすすめは `inline`。** bench（security と concurrency の差分、各 21 回）での結果:
+**`inline` is recommended.** Bench results on the security and concurrency diffs:
+
+| 形 / Form | 欠陥の見逃し / Misses | 1 回の費用 / Cost per run |
+|---|---|---|
+| `inline` | 0 | $0.35 |
+| `subagent` `combined` | 0 | $0.51 |
+| `subagent` `parallel` | 0 | $0.70 |
+| `command`（観点を Codex で / lenses on Codex, 27 runs） | 1 / 27 | $0.59 + Codex |
+
+見逃しは同じなので、いちばん安い `inline` を既定にした。担当に小さいモデルを選んでも、親が差分を読む分に上乗せになるので `inline` より安くならない。
+`command` で別のサービスの AI を使うと、差分がそのサービスに送られる。
+Misses were equal, so the cheapest form is the default. A smaller `runner_model` adds to the parent's cost rather than replacing it.
+With `command`, the diff is sent to that service.
+
 **規律の優先順位 / Precedence:** その場のユーザーの指示 → `config.yaml` → プロジェクトのルール → キットの規律。
 The user's instruction in the moment, then `config.yaml`, then the project's rules, then the kit.
 
@@ -134,7 +166,7 @@ bench/fixtures/            # 外側の段階を確かめる練習用のプロジ
 
 ## 計画 / Plan
 
-進める順番、各段階の完了の判定、決めたことと測った結果は `PLAN.md` にある。
+進める順番、各段階の完了の判定、決めたことと測った結果（既定の値がなぜそうなのか）は `PLAN.md` にある。
 The phases, their completion criteria, decisions and measured results are in `PLAN.md`.
 
 ## 貢献 / Contributing
