@@ -26,12 +26,15 @@ Search first and open only what you need — opening a file can pull in the proj
 | `profile.md`（先頭の YAML） | `language` | 報告に使う言語（例 `ja`, `en`） | すべて |
 | | `diff_base` | 差分の基準にするブランチ | すべて |
 | | `code` | 実装のファイルとみなすパターンの一覧 | すべて |
-| | `lenses.<観点>.catalog` | `config.yaml` の `lenses` に挙げた観点ごとの、判定の基準のファイル（根元からの相対パス） | すべて |
+| | `lenses.<観点>.catalog` | `config.yaml` の `lenses` に挙げた観点ごとの、判定の基準のファイル（根元からの相対パス）。`structure` だけ必須。`security`・`concurrency` はプロジェクトが足す項目（無くてよい。汎用の項目は観点のファイルにある）。`acceptance` は要らない（基準はシナリオの出典） | すべて |
 | | `tdd.suites` | テストのスイートの一覧（`tdd.md` の「プロジェクトの情報」） | TDD の入口 |
-| `config.yaml` | `runner` | `inline`（今の版はこれだけ） | すべて |
-| | `lenses` | 使う観点の一覧（今の版は `structure` だけ） | すべて |
+| `config.yaml` | `runner` | `inline`・`subagent`・`command`（`review.md`「観点を実行する」。`subagent` は任意で `runner_mode`（`parallel`・`combined`、既定は `parallel`）と `runner_model`、`command` は必須の `runner_command`（引数の配列）と任意の `runner_mode`） | すべて |
+| | `lenses` | 使う観点の一覧（`structure`・`acceptance`・`security`・`concurrency`）。`[]` なら観点を使わない（`ad-review` は観点が無いと伝えて止まる）。`acceptance` は常に新しい文脈で動かす（`runner` に関わらない） | すべて |
 | | `commit` | `never` / `on-request` / `on-green` | すべて |
 | | `commit_language` | コミットメッセージの言語（例 `ja`, `en`） | TDD の入口 |
+
+任意の項目: `config.yaml` の `backlog`（`file`・`none`。既定は `none`。`plan.md`「ストーリーに分ける」）、`router`（`none`・`inert`。既定は `none`。`review.md`「観点を選ぶ」）。`profile.md` の `examples`（`typescript`・`rust`・`none`。キットの `examples/` の言語パック）。無ければ `none`。
+Optional: the profile's `examples` picks a language pack; absent means none.
 
 `profile.md` の YAML の後ろの本文は、このプロジェクトについての自由なメモ。手順が参照を指示したときに読む。
 The prose after the profile's YAML is free-form project notes; read it when a procedure says so.
@@ -52,5 +55,6 @@ The prose after the profile's YAML is free-form project notes; read it when a pr
   If the catalog is auto-loaded, open a changed file first (you need it anyway and it pulls the catalog in);
   open the catalog only if it is still not in context.
 - **返し方を固定する。** 観点の手順が決めた見出しの形で指摘を書き、最後の行を `## LENS CLEAN`（指摘 0 件）か `## LENS FINDINGS <件数>` にする。
+  `acceptance` はこれに `## LENS UNVERIFIED <件数>` と `## LENS STOPPED` が加わる（`lenses/acceptance.md`）。
   End with `## LENS CLEAN` or `## LENS FINDINGS <n>`.
 - 報告は `profile.md` の `language` で書く。 / Report in the profile's `language`.

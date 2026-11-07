@@ -1,6 +1,6 @@
 interface:
   display_name: "ad-retro"
-  short_description: "Record a short retrospective"
+  short_description: "Record a short retrospective, or track countermeasures"
 
 policy:
   allow_implicit_invocation: false

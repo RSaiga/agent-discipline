@@ -1,6 +1,6 @@
 # plan — テストのリストを作る / Plan the test list
 
-テストも実装も書かない。書いてよいのは、そのブランチのリスト（`tdd.md`「テストのリスト」の置き場）だけで、**承認を得てから**書く。
+テストも実装も書かない。書いてよいのは、そのブランチのリスト（`tdd.md`「テストのリスト」の置き場）と、ストーリーに分けたときのバックログ（下の「ストーリーに分ける」）だけで、**承認を得てから**書く。
 `profile.md`・`config.yaml` は書かない。コミットしない。
 Write no code and no tests. The only file you may write is this branch's test list, and only after approval.
 
@@ -16,6 +16,8 @@ Write no code and no tests. The only file you may write is this branch's test li
 - `tdd.rules` の規約を読む。期待値の出典（依頼、仕様、置き換え元の実装、既存のテストの期待値）を特定する。
 - **既存の仕組みを先に探す。** 同じことをしている関数・型・画面を検索し、作り直さずに使えるものを挙げる。
 - `tdd.acceptance` があれば、受け入れテストの形式・置き場所・お手本を確かめる。
+- **1 つのリストに収まるか確かめる。** 依頼が、外から見て別々に価値のある振る舞いを 2 つ以上含むとき（別々に出せる、別々に止められる）は、
+  リストを作る前に「ストーリーに分ける」を行う。収まるなら、そのまま 3 へ。 / If the request holds two or more separately valuable behaviours, split it into stories first.
 
 ## 3. 作業の種類とモードを決める / Kind of work and mode
 
@@ -45,6 +47,9 @@ Write no code and no tests. The only file you may write is this branch's test li
   - 不具合の修正なら、不具合を再現して落ちるテストを先頭に置く。
 - **実際に使われる経路に絞る。** 呼ばれていない分岐やパラメータは「今回やらない」に理由つきで置く。
 - **出典の無い項目を置かない。**
+- **すでに成り立つ振る舞いを項目にしない。** 共通の仕組み（認証のミドルウェア、共通の入力の検証、エラーの変換など）や、前の項目の実装で
+  自然に成り立つものは、落ちるテストが書けない。項目にせず、「既存のテスト」の節に、どの仕組みが守っているか（とそのテストの名前）を書く。
+  Never list a behaviour that already holds (shared middleware, a previous item); name what guards it under existing tests instead.
 
 ## 5. 下書きを見せる / Present the draft
 
@@ -79,10 +84,23 @@ Keep the existing-test inventory in the list itself, with a reason for every "un
 ```
 書けなければ（権限、書き込みの失敗）、止まって報告する。
 
+## ストーリーに分ける / Split into stories
+
+1. **振る舞いで分ける。** 1 ストーリー = 外から見える 1 つの振る舞い。前提・きっかけ・結果（外から見えるもの）を 1 行ずつ書く。
+   層や作業（画面・API・DB）で分けない。内部の構造の準備だけのストーリーは、直後のストーリーに要る分だけ置き、そのストーリーの直前に並べる。
+2. **価値の順に並べる。** 前のストーリーだけで止めても使える順にする（どこで止めても、終えた数に見合う価値が残る）。
+3. **名前は振る舞いで付ける。** 段階の番号や作業の順番を名前にしない。
+4. **下書きを見せ、承認を得てから書く。** 書き先は `config.yaml` の `backlog`:
+   - `file`: `.agent-discipline/backlog.md` に、ストーリーごとに見出し（名前）と、前提・きっかけ・結果、出典を書く。すでにあれば、置き換えずに足す案を聞く。
+   - `none`（既定）: どこにも書かず、下書きを報告に残す。
+5. **最初のストーリーだけ、続けて 3 以降でリストを作る**（承認が別に要る）。ほかのストーリーは、そのストーリーを始めるときに `ad-plan` を呼ぶ。
+Split by externally observable behaviour (pre-condition, trigger, post-condition), order by value so stopping anywhere still leaves value,
+name stories by behaviour, write them to the backlog only after approval, then plan only the first story's list.
+
 ## 7. 止まる / Stop
 
 「モード / シナリオ n 本 / 内側 m 件 / 今回やらない k 件」と完了の条件、リストの置き場を報告する。
-次は、単層なら `ad-cycle` か `ad-red`、二重ループなら `ad-accept`（通しの `ad-cycle` は、今の版では単層だけ）。
+次は `ad-cycle`（通し）。段階ごとに進めるなら、単層は `ad-red`、二重ループは `ad-accept`。
 
 **しないこと / Never:** テストや実装を書くこと、実装の方針を決め込むこと（設計は green と refactor で決まる）、境界や例外の変種を外側に積むこと、
 使われていない経路をリストに入れること、出典の無い項目、承認の前に書くこと、今あるリストを聞かずに置き換えること。

@@ -10,13 +10,25 @@ Write only inside `<root>/.agent-discipline/`. Never change Git config, `.gitign
    - `language`: これまでのやりとりの言語。
    - `diff_base`: 既定のブランチ（`git symbolic-ref refs/remotes/origin/HEAD` など）。
    - `code`: リポジトリに実際にある実装の拡張子。
-   - `lenses.structure.catalog`: プロジェクトのリファクタリングの規約やカタログ。見つからなければ空のままにし、そのことを報告で伝える（推測で作らない）。
+   - `examples`: キットの `examples/` にその言語の言語パックがあれば、その名前（`typescript`・`rust`）。無ければ `none`。
+   - `lenses.structure.catalog`: プロジェクトのリファクタリングの規約やカタログ。推測で作らない。
+     見つからなければ、キットの `templates/refactoring.md`（汎用のカタログ）を `.agent-discipline/refactoring.md` に置いてそこを指す案を、
+     下書きに含めて聞く。断られたら `catalog` は空のまま、`config.yaml` の `lenses` を `[]` にし、構造の観点が働かないことを伝える。
+     With no catalog in the project, offer to copy the kit's starter catalog into `.agent-discipline/`; if declined, set `lenses: []`.
    - `lenses.structure.catalog_auto_loaded`: その規約が、フォルダを対象にして自動で読み込まれる設定になっているなら `true`。分からなければ `false`。
    - `tdd.suites`: プロジェクトが実際に使っているテストのコマンド（README、タスクランナー、パッケージの scripts など）。全体と 1 本に絞る形を、試さずに書けるものだけ書く。
-     `speed` は分からなければ書かず、そのことを伝える（最初に `ad-cycle` を回すときに測る）。
+     `speed` は分からなければ書かず、そのことを伝える（`ad-cycle` が最初の全体の実行で決める。単独の段では `slow` として扱う）。
    - `tdd.tests`: 既存のテストの置き場所と、倣うお手本にできるテストのファイル。
    - `tdd.checks`・`tdd.known_failures`・`tdd.hooks`・`tdd.rules`: プロジェクトから読み取れたものだけ。無ければ `none`。既知の失敗は推測で書かない。
+   - `tdd.acceptance`・`tdd.stack`: 受け入れテスト（外からスタックを動かして確かめるテスト）があれば、`tdd.md`「プロジェクトの情報」の表のキーを
+     すべて埋める。無ければ `acceptance: none`。とくに次を、走らせ方のスクリプトや設定を読んで確かめる:
+     - `format` に、進行中のシナリオの印（タグなど）と、それが既定の実行から外れる仕組みを書く。
+     - `run_one` は、その道具が実際に絞れる単位（名前・タグ・ファイル・行）で書く。名前で絞れなければ、そう書いて代わりの絞り方を書く。
+     - `selected` に、選ばれた件数の読み方と、0 件のときの出力（終了コードが 0 のままか）を書く。
+     Fill every acceptance and stack key from the project's scripts: the in-progress marker, a `run_one` the tool can actually do, and how zero selected looks.
    - `commit_language`（`config.yaml`）: 既存のコミットの件名の言語。
+   - `lenses`（`config.yaml`）: `structure`（カタログがあるか、汎用のカタログを置いたとき）。`tdd.acceptance` が `none` でなければ、
+     `acceptance` を足す案を下書きに含める（外側のシナリオを閉じるたびに新しい文脈を 1 つ起動するので、その分の費用が増えると伝える）。
    Fill values from the project itself; leave unknowns empty and say so — never invent a catalog, a command, or a known failure.
 4. **下書きを見せて、ユーザーの了承を得てから書く。** / Show the draft; write only after the user agrees.
 5. **個人用か共有かを聞く。**

@@ -13,6 +13,9 @@
 #            check.sh grades the clone after the run and prints {"pass", ...}; both it and
 #            expect must pass.
 # variant  : [install.sh <repo>], [claude.args.json], [kit] (a checkout whose commit is recorded),
+#            [driver] ("codex" runs `codex exec --json` in the isolated $CODEX_BENCH_HOME, default
+#            $BENCH_ROOT/codex-home, and converts its events with codex-stream.py; claude.args.json is
+#            not used, codex.args.json is appended to codex exec),
 #            [<name>.txt] (the command that replaces {<name>} in a task's prompt, e.g. review.txt or
 #            cycle.txt, since kits are invoked by different names; a prompt without placeholders runs
 #            unchanged)
@@ -112,8 +115,19 @@ for rep in $(seq 1 "$repeat"); do
     raw="$RESULTS/out/$id.jsonl"
     set +e
     rundir="$work/$CLONE"; [ -f "$task/cwd" ] && rundir="$work/$CLONE/$(cat "$task/cwd")"
-    (cd "$rundir" && claude "${args[@]}") < /dev/null > "$raw" 2> "$RESULTS/out/$id.stderr"
-    code=$?
+    driver=claude; [ -f "$vdir/driver" ] && driver="$(cat "$vdir/driver")"
+    if [ "$driver" = codex ]; then
+      args=(exec --json --ephemeral --sandbox workspace-write -C "$rundir")
+      append_args "$task/codex.args.json"
+      append_args "$vdir/codex.args.json"
+      args+=("$prompt")
+      CODEX_HOME="${CODEX_BENCH_HOME:-$BENCH_ROOT/codex-home}" codex "${args[@]}" < /dev/null > "$raw.codex" 2> "$RESULTS/out/$id.stderr"
+      code=$?
+      python3 "$here/codex-stream.py" "$raw.codex" "$code" > "$raw"
+    else
+      (cd "$rundir" && claude "${args[@]}") < /dev/null > "$raw" 2> "$RESULTS/out/$id.stderr"
+      code=$?
+    fi
     set -e
 
     printf '%s\0' "${args[@]}" > "$RESULTS/out/$id.args"
@@ -172,6 +186,7 @@ print(json.dumps({
     "subagent_stats": result.get("subagent_stats"),
     "permission_denials": len(result.get("permission_denials") or []),
     "turns": result.get("num_turns"), "duration_ms": result.get("duration_ms"),
+    "codex_usage": result.get("codex_usage"),
     **grade, "check": check,
 }, ensure_ascii=False))
 EOF

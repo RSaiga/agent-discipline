@@ -6,7 +6,8 @@
 
 1. **緑であることを確かめる。** 直前の green の結果がまだ有効なら、それを使う。緑でなければ止まる。
 2. **直近の変更を読み、直す価値のある構造の問題を挙げる。** 基準は `profile.md` の `lenses.structure.catalog`
-   （`lenses/structure.md` の判定の心得に従う）と、`tdd.rules` の規約。プロジェクトの規約に反している箇所を先に直す。
+   （`lenses/structure.md` の判定の心得に従う。`config.yaml` の `lenses` に `structure` が無ければ使わない）と、`tdd.rules` の規約。
+   プロジェクトの規約に反している箇所を先に直す。基準がどちらも無ければ、そう伝えて何もしない。
    テストのコードも対象（準備の重複をまとめる、名前を直す）。ただし、何をどの値で確かめるか（アサーション、期待値、本数）は変えない。
    **直すものが無ければ、無いと言って何もしない。** リファクタをひねり出さない。
    Name the structural problems from the catalog and the project's rules. Nothing to fix → say so and change nothing.
