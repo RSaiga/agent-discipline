@@ -23,7 +23,8 @@ Read-only throughout. Fixing is not part of review.
   2 で選んだ観点の分だけ、そのあとでまとめて読む。読んでから飛ばしても節約にならない）:
   - `config.yaml` の観点ごとに `lenses/<観点>.md` を読む。
   - 観点ごとの基準のファイル（`profile.md` の `lenses.<観点>.catalog`）を読む。`catalog_auto_loaded: true` の観点は除く。
-    `profile.md` の `examples` が `none` 以外なら、キットの `examples/<examples>/<観点>.md` もあれば読む（直し方の見本。要件ではない）。
+    `profile.md` の `examples` が `none` 以外なら、挙げた言語パックごとに、キットの `examples/<言語>/<観点>.md` もあれば読む（直し方の見本。要件ではない）。
+    言語パックが複数あるときは、対象のファイルの言語に合うものだけを読む（変更が TypeScript だけなら `typescript` だけ）。
   - 次の 1 つのコマンドを実行する（最後の行は作業ツリーの指紋。追跡外のファイルも含む）:
   ```
   git diff --name-only <diff_base>...HEAD; echo ---; git diff --name-only; echo ---; git diff --name-only --cached; echo ---; git ls-files --others --exclude-standard; echo ---; git diff <diff_base>; echo ---; { git diff HEAD; git diff --cached; git ls-files --others --exclude-standard -z | xargs -0 git hash-object; } | git hash-object --stdin
