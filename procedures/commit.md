@@ -10,7 +10,11 @@
 3. **差分を全部読む。** 作業で自分が触っていないファイルが混ざっていたら、ステージしない。切り分けられなければ止まる。
 4. **触ったファイルを名指しでステージする。** すべてをまとめてステージしない。リスト（`.agent-discipline/`）は入れない。
 5. **振る舞いの変更とリファクタを同じコミットに入れない。** 両方あれば、振る舞い → リファクタの順に分ける。種類が 2 つ浮かんだら、コミットも 2 つ。
-6. **メッセージ:** Conventional Commits の 1 行（`<type>(<scope>): <件名>`）。件名は `config.yaml` の `commit_language` で書く。
+6. **メッセージ:** 形は `config.yaml` の `commit_style`（既定は `conventional`）、件名の言語は `commit_language` で決める。
+   - `conventional`: Conventional Commits の 1 行（`<type>(<scope>): <件名>`）。
+   - `history`: `git log -20 --format=%s` を読み、既存の件名の形（接頭辞やタグ、大文字と小文字、動詞の形、長さ）に合わせた 1 行。
+     下の type の区別はそのまま使い、履歴に種類の書き方があればそれで表す。無ければ件名の言葉で分かるようにする（リファクタだと読めるように）。
+     With `history`, match the form of the last 20 subjects; keep the type distinction below, expressed the way the history does.
    - type: `feat` 新しい振る舞い / `fix` 不具合の修正 / `refactor` 振る舞いを変えない構造の変更 / `test` テストだけ / `chore` 依存・設定など。
      テストの期待値を書き換えた・テストを足したコミット（`[change]` を含む）は `refactor` にしない。`refactor` は期待値に触れていないコミットだけ。
      A commit that changed or added an expectation (including `[change]`) is never `refactor`.

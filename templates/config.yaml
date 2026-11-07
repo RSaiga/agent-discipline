@@ -4,3 +4,4 @@ backlog: none           # none | file (.agent-discipline/backlog.md, written by 
 router: none            # none | inert (skip security/concurrency on comment-only, new-test-only or rename-only changes)
 commit: never           # never | on-request | on-green
 commit_language: en     # language of commit subjects
+commit_style: conventional  # conventional (<type>(<scope>): <subject>) | history (match the last 20 subjects)

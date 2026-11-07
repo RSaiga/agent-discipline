@@ -27,6 +27,7 @@ Write only inside `<root>/.agent-discipline/`. Never change Git config, `.gitign
      - `selected` に、選ばれた件数の読み方と、0 件のときの出力（終了コードが 0 のままか）を書く。
      Fill every acceptance and stack key from the project's scripts: the in-progress marker, a `run_one` the tool can actually do, and how zero selected looks.
    - `commit_language`（`config.yaml`）: 既存のコミットの件名の言語。
+   - `commit_style`（`config.yaml`）: 既存の件名の多くが `<type>(<scope>): ` の形なら `conventional`、そうでなければ `history`。根拠に件名を 2〜3 件示す。
    - `lenses`（`config.yaml`）: 使える観点を**すべて**下書きに並べ、プロジェクトを読んで、観点ごとに「入れる案／入れない案」と根拠（見つけたファイル）を書く。
      | 観点 | 入れる案にする目安 |
      |---|---|
