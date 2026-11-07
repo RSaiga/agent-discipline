@@ -2,7 +2,7 @@
 language: en
 diff_base: main
 code: ["*.ts", "*.tsx"]
-examples: typescript    # language pack under the kit's examples/: typescript | rust | go | python | java | php | ruby | csharp | none
+examples: [typescript]  # language packs under the kit's examples/, one or more: typescript, rust, go, python, java, php, ruby, csharp; or none
 lenses:
   structure:
     catalog: docs/refactoring.md

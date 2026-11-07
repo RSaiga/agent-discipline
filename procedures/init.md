@@ -10,7 +10,7 @@ Write only inside `<root>/.agent-discipline/`. Never change Git config, `.gitign
    - `language`: これまでのやりとりの言語。
    - `diff_base`: 既定のブランチ（`git symbolic-ref refs/remotes/origin/HEAD` など）。
    - `code`: リポジトリに実際にある実装の拡張子。
-   - `examples`: キットの `examples/` にその言語の言語パックがあれば、その名前（`typescript`・`rust`・`go`・`python`・`java`・`php`・`ruby`・`csharp`。Kotlin は `java`）。無ければ `none`。
+   - `examples`: リポジトリにある言語のうち、キットの `examples/` に言語パックがあるものをすべて、一覧で（例 `[rust, typescript]`。`typescript`・`rust`・`go`・`python`・`java`・`php`・`ruby`・`csharp`。Kotlin は `java`）。1 つも無ければ `none`。
    - `lenses.structure.catalog`: プロジェクトのリファクタリングの規約やカタログ。推測で作らない。
      見つからなければ、キットの `templates/refactoring.md`（汎用のカタログ）を `.agent-discipline/refactoring.md` に置いてそこを指す案を、
      下書きに含めて聞く。断られたら `catalog` は空のまま、`config.yaml` の `lenses` を `[]` にし、構造の観点が働かないことを伝える。

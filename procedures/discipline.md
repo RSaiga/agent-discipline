@@ -33,8 +33,8 @@ Search first and open only what you need — opening a file can pull in the proj
 | | `commit` | `never` / `on-request` / `on-green` | すべて |
 | | `commit_language` | コミットメッセージの言語（例 `ja`, `en`） | TDD の入口 |
 
-任意の項目: `profile.md` の `examples`（`typescript`・`rust`・`go`・`python`・`java`・`php`・`ruby`・`csharp`・`none`）、`config.yaml` の `backlog`（`file`・`none`。既定は `none`。`plan.md`「ストーリーに分ける」）、`router`（`none`・`inert`。既定は `none`。`review.md`「観点を選ぶ」）。言語パック（キットの `examples/`）は、無ければ `none`。
-Optional: the profile's `examples` picks a language pack; absent means none.
+任意の項目: `profile.md` の `examples`（言語パックの名前か、その一覧。`typescript`・`rust`・`go`・`python`・`java`・`php`・`ruby`・`csharp`・`none`）、`config.yaml` の `backlog`（`file`・`none`。既定は `none`。`plan.md`「ストーリーに分ける」）、`router`（`none`・`inert`。既定は `none`。`review.md`「観点を選ぶ」）。言語パック（キットの `examples/`）は、無ければ `none`。
+Optional: the profile's `examples` names one language pack or a list of them; absent means none.
 
 `profile.md` の YAML の後ろの本文は、このプロジェクトについての自由なメモ。手順が参照を指示したときに読む。
 The prose after the profile's YAML is free-form project notes; read it when a procedure says so.
