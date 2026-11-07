@@ -137,6 +137,11 @@ bench/fixtures/            # 外側の段階を確かめる練習用のプロジ
 進める順番、各段階の完了の判定、決めたことと測った結果は `PLAN.md` にある。
 The phases, their completion criteria, decisions and measured results are in `PLAN.md`.
 
+## 貢献 / Contributing
+
+Issue とプルリクエストを歓迎します。`CONTRIBUTING.md` を見てください。`main` への変更はプルリクエストだけで、`bench/tests` が GitHub Actions で通る必要があります。
+Issues and pull requests are welcome; see `CONTRIBUTING.md`. `main` changes only through pull requests, with `bench/tests` passing in GitHub Actions.
+
 ## ライセンス / License
 
 MIT
