@@ -1,6 +1,0 @@
-interface:
-  display_name: "ad-cycle"
-  short_description: "Run the TDD loop until the list is done"
-
-policy:
-  allow_implicit_invocation: false

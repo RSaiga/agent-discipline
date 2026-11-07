@@ -1,11 +1,11 @@
 # tdd — TDD の共通の規律 / Shared TDD discipline
 
-TDD の入口（`ad-plan`、`ad-cycle`、`ad-accept`、`ad-red`、`ad-green`、`ad-refactor`、`ad-commit`）が、`discipline.md` のあとに読む。
+TDD の入口（`tdd-plan`、`tdd-cycle`、`tdd-accept`、`tdd-red`、`tdd-green`、`tdd-refactor`、`tdd-commit`）が、`discipline.md` のあとに読む。
 リストを作るのは `plan.md`、外側の段階は `accept.md`、内側の段階は `red.md`・`green.md`・`refactor.md`・`commit.md`、通しの流れは `cycle.md` にある。
 Every TDD entry reads this after `discipline.md`. Stage procedures live in their own files.
 
-単層と二重ループ（受け入れテストを外側に置く）の両方を扱う。段階ごとの入口でも、通しの `ad-cycle` でも回せる。
-Handles both the single layer and the double loop, stage by stage or end to end with `ad-cycle`.
+単層と二重ループ（受け入れテストを外側に置く）の両方を扱う。段階ごとの入口でも、通しの `tdd-cycle` でも回せる。
+Handles both the single layer and the double loop, stage by stage or end to end with `tdd-cycle`.
 
 **二重ループ:** 外側は受け入れシナリオ 1 本、内側はそれを緑にするための項目。シナリオごとに、外側を書いて振る舞いで落とす（accept）→
 内側を red → green → refactor で 1 件ずつ → 内側が尽きたら外側を走らせる（accept）。外側の失敗が、次に足りない振る舞いを 1 つ示す。
@@ -13,8 +13,8 @@ Handles both the single layer and the double loop, stage by stage or end to end 
 
 ## 絶対の規則 / Hard rules
 
-1. **呼ばれた段階だけを行う。** 次の段階を「ついでに」やらない（`ad-cycle` は段階の境界だけを越える。中身の規律は緩めない）。
-   Do only the stage you were called for. `ad-cycle` crosses stage boundaries, nothing else.
+1. **呼ばれた段階だけを行う。** 次の段階を「ついでに」やらない（`tdd-cycle` は段階の境界だけを越える。中身の規律は緩めない）。
+   Do only the stage you were called for. `tdd-cycle` crosses stage boundaries, nothing else.
 2. **テストを消さない・飛ばさない・期待値を緩めない。** 落ちているテストは情報である。例外は、リストの `[change]`・`[remove]` の項目だけ
    （承認された仕様の変更を出典に、red で既存のテストを書き換える・消す）。
    Never delete, skip, or weaken a test. Only `[change]` / `[remove]` items, backed by an approved spec change, may, in RED.
@@ -34,7 +34,7 @@ Project-specific facts come from the profile's `tdd` block; never guess what it 
 
 | 項目 | 中身 |
 |---|---|
-| `tdd.suites` | スイートごとに `name`、全体を走らせるコマンド `all`、1 本に絞るコマンド `one`（`<path>` と `<name>` を置き換える）、`speed`（`fast` / `slow`。無ければ `ad-cycle` が最初の全体の実行で決め、単独の段では `slow` として扱う） |
+| `tdd.suites` | スイートごとに `name`、全体を走らせるコマンド `all`、1 本に絞るコマンド `one`（`<path>` と `<name>` を置き換える）、`speed`（`fast` / `slow`。無ければ `tdd-cycle` が最初の全体の実行で決め、単独の段では `slow` として扱う） |
 | `tdd.checks` | テストとは別に、緑の確認で走らせるもの（型の確認など）。無ければ `none` |
 | `tdd.tests` | テストの置き場所と、倣うお手本のファイル（種類ごと） |
 | `tdd.known_failures` | 最初から落ちていて構わないテスト（スイート・テストの名前・条件）。**ここに名前のあるものだけ**を除く。無ければ `none` |

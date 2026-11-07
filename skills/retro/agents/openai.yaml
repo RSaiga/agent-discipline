@@ -1,0 +1,6 @@
+interface:
+  display_name: "retro"
+  short_description: "Record a short retrospective, or track countermeasures"
+
+policy:
+  allow_implicit_invocation: false

@@ -1,6 +1,6 @@
 runner: inline          # inline | subagent (runner_mode: parallel | combined, runner_model) | command (runner_command: [argv...], {root} substituted, prompt on stdin)
-lenses: [structure]     # structure, acceptance, security, concurrency
-backlog: none           # none | file (.agent-discipline/backlog.md, written by ad-plan when it splits a request into stories)
+lenses: [structure]     # structure, acceptance, security, concurrency, isolation
+backlog: none           # none | file (.agent-discipline/backlog.md, written by tdd-plan when it splits a request into stories)
 router: none            # none | inert (skip security/concurrency on comment-only, new-test-only or rename-only changes)
 commit: never           # never | on-request | on-green
 commit_language: en     # language of commit subjects

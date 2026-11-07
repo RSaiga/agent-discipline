@@ -15,16 +15,16 @@ At its core are **lenses**: read a change from a fixed perspective and return na
 
 | 入口 / Entry | すること / What it does |
 |---|---|
-| `ad-init` | プロジェクトを読んで `.agent-discipline/` の設定を下書きし、了承を得てから書く / Drafts the project settings and writes them after you agree |
-| `ad-review` | 作業中の変更を観点で読む（structure・security・concurrency・acceptance）。読むだけ / Reviews the working change through the lenses. Read-only |
-| `ad-plan` | 変更のテストのリストを作る（モード、シナリオ、内側の項目、変わる既存のテスト）。大きな依頼は先にストーリーに分ける。承認のあとで書く / Plans the test list, splitting large requests into stories first; writes after approval |
-| `ad-cycle` | テストのリストが尽きるまで回す。単層なら red → green → コミット → refactor、二重ループならシナリオごとに外側と内側を回す / Runs the TDD loop until the list is done, single layer or double loop |
-| `ad-accept` | 二重ループの外側の 1 手: 受け入れシナリオを書いて振る舞いで落とす、または走らせて緑なら閉じる / One outer-loop step: write the acceptance scenario and watch it fail, or run it and close it when green |
-| `ad-red` `ad-green` `ad-refactor` `ad-commit` | TDD の 1 段階だけを行う / Runs one TDD stage |
-| `ad-retro` | 意図・結果・止まった箇所（と対策）を `findings.md` に残す。`track` で対策が効いたかを判定する / Records a retrospective; with `track`, judges whether countermeasures worked |
+| `init` | プロジェクトを読んで `.agent-discipline/` の設定を下書きし、了承を得てから書く / Drafts the project settings and writes them after you agree |
+| `review` | 作業中の変更を観点で読む（structure・security・concurrency・acceptance）。読むだけ / Reviews the working change through the lenses. Read-only |
+| `tdd-plan` | 変更のテストのリストを作る（モード、シナリオ、内側の項目、変わる既存のテスト）。大きな依頼は先にストーリーに分ける。承認のあとで書く / Plans the test list, splitting large requests into stories first; writes after approval |
+| `tdd-cycle` | テストのリストが尽きるまで回す。単層なら red → green → コミット → refactor、二重ループならシナリオごとに外側と内側を回す / Runs the TDD loop until the list is done, single layer or double loop |
+| `tdd-accept` | 二重ループの外側の 1 手: 受け入れシナリオを書いて振る舞いで落とす、または走らせて緑なら閉じる / One outer-loop step: write the acceptance scenario and watch it fail, or run it and close it when green |
+| `tdd-red` `tdd-green` `tdd-refactor` `tdd-commit` | TDD の 1 段階だけを行う / Runs one TDD stage |
+| `retro` | 意図・結果・止まった箇所（と対策）を `findings.md` に残す。`track` で対策が効いたかを判定する / Records a retrospective; with `track`, judges whether countermeasures worked |
 
-TDD は、外側の受け入れテストを持たない **単層** と、受け入れテストを外側に置く **二重ループ** を扱う。どちらも `ad-cycle` で通しで回せ、段階ごとの入口でも回せる。
-TDD runs the single layer and the double loop, end to end with `ad-cycle` or stage by stage.
+TDD は、外側の受け入れテストを持たない **単層** と、受け入れテストを外側に置く **二重ループ** を扱う。どちらも `tdd-cycle` で通しで回せ、段階ごとの入口でも回せる。
+TDD runs the single layer and the double loop, end to end with `tdd-cycle` or stage by stage.
 
 **観点 / Lenses**
 
@@ -33,9 +33,10 @@ TDD runs the single layer and the double loop, end to end with `ad-cycle` or sta
 | structure | プロジェクトのリファクタリングのカタログ（無ければキットの汎用のカタログ）の code smell / code smells from the project's (or the kit's starter) catalog |
 | security | 認可・テナント分離・入力の境界・内部の漏れ・秘密・注入・外からの呼び出しの検証（SEC-1〜7）/ authorization, tenancy, input bounds, leaks, secrets, injection, webhook checks |
 | concurrency | 確かめてから書くまでの競合・冪等性・トランザクション・複数インスタンス・共有の状態など（CON-1〜8）/ races, idempotency, transactions, shared state |
+| isolation | データが混ざらないか: テナントの絞り込み・またぐ集計・キー・非同期の文脈・存在の漏れ、テスト同士のデータ・共有の状態・並列の取り合い（ISO-1〜8）/ tenant isolation and test isolation |
 | acceptance | 緑になったシナリオの約束を、実装が本当に守っているか。書き手の結論を渡さず新しい文脈で読む / whether the implementation keeps a green scenario's promise, judged in a fresh context |
 
-acceptance は `ad-accept` がシナリオを閉じる前にかけ、破れていれば内側の項目に戻す。security と concurrency の確信度「高」には、破れる入力か壊れる順番を必ず添える。
+acceptance は `tdd-accept` がシナリオを閉じる前にかけ、破れていれば内側の項目に戻す。security と concurrency の確信度「高」には、破れる入力か壊れる順番を必ず添える。
 `config.yaml` で選べるもの: `runner`（`inline` 既定・`subagent`・`command`）、`router`（`none` 既定・`inert`）、`backlog`（`none` 既定・`file`）。
 The acceptance lens runs before a scenario closes. High-confidence security/concurrency findings always come with a breaking input or interleaving.
 `runner: command` runs lenses through another CLI, e.g. Codex: `runner_command: ["codex", "exec", "--ephemeral", "--sandbox", "read-only", "-C", "{root}"]`
@@ -50,14 +51,14 @@ The acceptance lens runs before a scenario closes. High-confidence security/conc
 claude plugin marketplace add RSaiga/agent-discipline
 claude plugin install agent-discipline@agent-discipline
 ```
-呼び出し / Invoke: `/agent-discipline:ad-review`
+呼び出し / Invoke: `/agent-discipline:review`
 
 **Codex**
 ```
 codex plugin marketplace add RSaiga/agent-discipline
 codex plugin add agent-discipline@agent-discipline
 ```
-呼び出し / Invoke: `$agent-discipline:ad-review`（名前空間が要る / the namespace is required）
+呼び出し / Invoke: `$agent-discipline:review`（名前空間が要る / the namespace is required）
 
 **更新 / Update**
 
@@ -68,12 +69,12 @@ codex plugin add agent-discipline@agent-discipline
 
 ## プロジェクトで使う / Use it in a project
 
-1. プロジェクトで `ad-init` を呼ぶ。下書きを見て、足りない項目を埋めてから了承する。
-   Invoke `ad-init` in the project, review the draft, fill what is missing, and agree.
+1. プロジェクトで `init` を呼ぶ。下書きを見て、足りない項目を埋めてから了承する。
+   Invoke `init` in the project, review the draft, fill what is missing, and agree.
 2. 個人で使うなら、`.git/info/exclude` に `/.agent-discipline/` を足す。チームで共有するなら、コミットする。
    For personal use, add `/.agent-discipline/` to `.git/info/exclude`; to share with the team, commit it.
-3. `ad-review` や `ad-cycle` を呼ぶ。設定が無いプロジェクトでは、何もせずに `ad-init` を案内して止まる。
-   Invoke `ad-review` or `ad-cycle`. Without settings, an entry points to `ad-init` and stops.
+3. `review` や `tdd-cycle` を呼ぶ。設定が無いプロジェクトでは、何もせずに `init` を案内して止まる。
+   Invoke `review` or `tdd-cycle`. Without settings, an entry points to `init` and stops.
 
 プロジェクトに置くもの / What lives in the project:
 
@@ -84,9 +85,9 @@ codex plugin add agent-discipline@agent-discipline
 ├── config.yaml     # キットの動かし方: runner、使う観点、コミットの方針と言語
 │                   # how the kit runs: runner, lenses, commit policy and language
 ├── lists/          # TDD のテストのリスト（ブランチごと）。コミットには入れない / per-branch TDD test lists, never committed
-├── backlog.md      # backlog: file のとき、ad-plan が分けたストーリー / stories ad-plan split out, with backlog: file
-├── refactoring.md  # プロジェクトにカタログが無いとき、ad-init が置くキットの汎用のカタログ / the kit's starter catalog, when the project has none
-└── findings.md     # ad-retro の記録 / ad-retro's log
+├── backlog.md      # backlog: file のとき、tdd-plan が分けたストーリー / stories tdd-plan split out, with backlog: file
+├── refactoring.md  # プロジェクトにカタログが無いとき、init が置くキットの汎用のカタログ / the kit's starter catalog, when the project has none
+└── findings.md     # retro の記録 / retro's log
 ```
 
 項目の意味は `templates/` の雛形と、`procedures/discipline.md`・`procedures/tdd.md` の表にある。

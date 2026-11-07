@@ -7,8 +7,18 @@ Read-only throughout. Fixing is not part of review.
 
 ## 1. 対象を決める / Scope
 
-- 呼び出しでファイルかディレクトリが指定されたら、それを対象にする。
-- 指定がなければ、作業中の変更を対象にする（コミット済み・未ステージ・ステージ済みを合わせたもの）。
+呼び出しの指定で、対象と読み方が 3 つに分かれる。 / The invocation picks one of three targets.
+
+| 指定 | 対象 | 見るところ |
+|---|---|---|
+| なし | 作業中の変更（コミット済み・未ステージ・ステージ済みを合わせたもの） | 変更した行 |
+| ブランチ名かコミットの範囲（`main..HEAD`・`HEAD~3..`・PR のブランチ） | その範囲の差分（実装したあとのレビュー） | 変更した行 |
+| ファイルかディレクトリ | **そのコード全体**（コードのレビュー。変更に限らない） | ファイルのすべての行 |
+
+- ブランチ名かコミットの範囲なら、下のコマンドの `<diff_base>` と作業中の差分の代わりに、その範囲の `git diff --name-only <範囲>` と `git diff <範囲>` を使う。
+- ファイルかディレクトリなら、差分ではなくファイルそのものを読む。`profile.md` の `code` に当てはまるファイルが 30 を超えるなら、
+  分け方（フォルダごと、機能ごと）を示して止まる（一度に読むと、どの観点も浅くなる）。`acceptance` は対象にしない（リストのシナリオがあるときだけの観点）。
+- 指定がなければ、作業中の変更を対象にする。
   設定を読んだ次の往復で、次の 3 つを**まとめて**行う（`router: inert` のときは 3 つ目のコマンドだけを先に実行し、観点のファイルと基準のファイルは
   2 で選んだ観点の分だけ、そのあとでまとめて読む。読んでから飛ばしても節約にならない）:
   - `config.yaml` の観点ごとに `lenses/<観点>.md` を読む。
@@ -20,28 +30,30 @@ Read-only throughout. Fixing is not part of review.
   ```
   If no target is given, review the working change. In the turn after reading the configuration, read the lens files and their catalogs (unless auto-loaded) and run the one command above, all together.
 - `profile.md` の `code` に当てはまるファイルだけを残す。追跡外の新しいファイルも対象（中身は差分ではなくファイルとして読む）。
-- **変更した行を中心に見る。** 周りの文脈は読んでよいが、変更と関係のない既存のコードは指摘しない。
-  Focus on changed lines; never flag untouched code.
+- **変更を対象にするときは、変更した行を中心に見る。** 周りの文脈は読んでよいが、変更と関係のない既存のコードは指摘しない。
+  ファイルかディレクトリを対象にするときは、すべての行が対象。
+  For a change, focus on changed lines and never flag untouched code; for files or directories, every line is in scope.
 - 対象が 0 件なら、そう報告して `## LENS CLEAN` で終える。
 
 ## 2. 観点を選ぶ / Route
 
 `config.yaml` の `router` が `inert` のときだけ行う（既定の `none` では、すべての観点を実行する）。観点のファイルを読む前に、1 の差分だけで決める。
-- **security と concurrency を飛ばしてよいのは、変更したすべての行が次のどれかに当たるときだけ。** 1 行でも当たらなければ、すべて実行する。迷ったら実行する。
+- **security・concurrency・isolation を飛ばしてよいのは、変更したすべての行が次のどれかに当たるときだけ。** 1 行でも当たらなければ、すべて実行する。迷ったら実行する。
   - コメントか空行だけの変更。
   - テストのファイル（`tdd.tests` の置き場所）に、新しいテストのケースを足すだけ。共有の準備・環境変数・時刻・モジュールの変数・ファイルに触れない。
+    この場合も `isolation` は飛ばさない（テスト同士のデータの独立は、この観点が見るもの）。
   - 1 つの関数の中だけで、名前を変えるだけ（ほかの字句は同じ）。
 - `structure` は常に実行する。`acceptance` はリストで決まる（`router` に関わらない）。プロジェクトが足した項目（`catalog`）を持つ観点は飛ばさない。
 - 飛ばした観点と、当たった条件を報告に書く（「飛ばした: security, concurrency — コメントだけの変更」）。飛ばした観点は `CLEAN` ではない。
-Run only with `router: inert`: skip security and concurrency only when every changed line is a comment, a new test case that touches no shared
-state, or a rename inside one function; otherwise run everything. Report what was skipped and why; a skipped lens is not CLEAN.
+Run only with `router: inert`: skip security, concurrency and isolation only when every changed line is a comment, a new test case that touches no
+shared state (isolation still runs on test changes), or a rename inside one function; otherwise run everything. Report what was skipped and why; a skipped lens is not CLEAN.
 
 ## 3. 観点を実行する / Run the lenses
 
 `config.yaml` の `runner` に従う。観点が読んでいるあいだ、誰も書かない。 / Nobody writes while lenses read.
 
 - **`inline`**（既定）: `lenses` の順に、`lenses/<観点>.md` を読んで同じ文脈で実行する。
-- **`subagent`**: 観点を新しい文脈で動かす。ツールに `ad-lens` の担当があればそれを、無ければ新しい文脈の担当を使う。
+- **`subagent`**: 観点を新しい文脈で動かす。ツールに `lens-runner` の担当があればそれを、無ければ新しい文脈の担当を使う。
   渡すのは、観点のファイルの絶対パス・基準のファイル・見本のファイル・プロジェクトの根元・`diff_base`・対象のファイルの一覧（追跡外を含む）だけ。
   担当は差分を `git diff <diff_base>` で自分で読む（読むだけのコマンドに限る）。
   - `runner_mode: parallel`（既定）: 観点ごとに 1 つずつ、同時に起動する。
@@ -69,7 +81,7 @@ A lens that fails to start or answers without its last line is STOPPED, never CL
 
 - 観点ごと、優先度ごとの件数と、観点ごとの最後の行
 - 「挙動を変えずに直せるもの」と「設計の判断が要るもの」の区別
-- security と concurrency の確信度「高」は正しさの問題として、**落ちるテストを書くところから**（`ad-red`）直すことを勧める。「中」「低」は報告だけ。
+- security・concurrency・isolation の確信度「高」は正しさの問題として、**落ちるテストを書くところから**（`tdd-red`）直すことを勧める。「中」「低」は報告だけ。
   直すのはこの手順の仕事ではない（読むだけ）。 / High security/concurrency findings are correctness bugs: recommend starting from a failing test.
 - 指摘が 0 件なら「構造的な指摘なし」のように**はっきり書く**。無理に絞り出さない。
   Say plainly when there is nothing to report; don't squeeze out findings.

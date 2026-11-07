@@ -1,6 +1,0 @@
-interface:
-  display_name: "ad-plan"
-  short_description: "Plan the TDD test list"
-
-policy:
-  allow_implicit_invocation: false

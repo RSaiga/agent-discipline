@@ -1,6 +1,0 @@
-interface:
-  display_name: "ad-red"
-  short_description: "Write one failing test"
-
-policy:
-  allow_implicit_invocation: false

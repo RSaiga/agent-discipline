@@ -5,8 +5,8 @@
 1. **リストから 1 件を決める。** 未着手 `[ ]` を上から 1 件取り、`[~]` にする（書けなければ `tdd.md` のとおり止まる）。
    全部終わっていれば「完了」と伝えて止まる。新しいテストをひねり出さない。
    二重ループのリストでは、進行中の `[~]` のシナリオの内側から取る。進行中のシナリオが無い、その内側が尽きている、
-   または最初の通り道（内側を持たない）なら、red は書かない。`ad-accept`（最初の通り道なら `ad-green`）を案内して止まる。
-   Take the first `[ ]` item and mark it `[~]`. In a double-loop list, take it from the scenario in progress; with none, point at `ad-accept`.
+   または最初の通り道（内側を持たない）なら、red は書かない。`tdd-accept`（最初の通り道なら `tdd-green`）を案内して止まる。
+   Take the first `[ ]` item and mark it `[~]`. In a double-loop list, take it from the scenario in progress; with none, point at `tdd-accept`.
 2. **出典を開いて、期待値を確かめる。** 項目の出典を実際に見て値を読む。リストの出典が実際と食い違えば、書き換えずに報告して止まる。
 3. **置き場所とお手本を決める。** `tdd.tests` の置き場所に置き、お手本と隣のテストの書き方（名前、準備、アサーション）に倣う。
    テストの名前で振る舞いを語る。

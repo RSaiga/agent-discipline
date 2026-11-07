@@ -93,14 +93,14 @@ Keep the existing-test inventory in the list itself, with a reason for every "un
 4. **下書きを見せ、承認を得てから書く。** 書き先は `config.yaml` の `backlog`:
    - `file`: `.agent-discipline/backlog.md` に、ストーリーごとに見出し（名前）と、前提・きっかけ・結果、出典を書く。すでにあれば、置き換えずに足す案を聞く。
    - `none`（既定）: どこにも書かず、下書きを報告に残す。
-5. **最初のストーリーだけ、続けて 3 以降でリストを作る**（承認が別に要る）。ほかのストーリーは、そのストーリーを始めるときに `ad-plan` を呼ぶ。
+5. **最初のストーリーだけ、続けて 3 以降でリストを作る**（承認が別に要る）。ほかのストーリーは、そのストーリーを始めるときに `tdd-plan` を呼ぶ。
 Split by externally observable behaviour (pre-condition, trigger, post-condition), order by value so stopping anywhere still leaves value,
 name stories by behaviour, write them to the backlog only after approval, then plan only the first story's list.
 
 ## 7. 止まる / Stop
 
 「モード / シナリオ n 本 / 内側 m 件 / 今回やらない k 件」と完了の条件、リストの置き場を報告する。
-次は `ad-cycle`（通し）。段階ごとに進めるなら、単層は `ad-red`、二重ループは `ad-accept`。
+次は `tdd-cycle`（通し）。段階ごとに進めるなら、単層は `tdd-red`、二重ループは `tdd-accept`。
 
 **しないこと / Never:** テストや実装を書くこと、実装の方針を決め込むこと（設計は green と refactor で決まる）、境界や例外の変種を外側に積むこと、
 使われていない経路をリストに入れること、出典の無い項目、承認の前に書くこと、今あるリストを聞かずに置き換えること。

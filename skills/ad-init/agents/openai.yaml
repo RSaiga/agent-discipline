@@ -1,6 +1,0 @@
-interface:
-  display_name: "ad-init"
-  short_description: "Set up agent-discipline for this project"
-
-policy:
-  allow_implicit_invocation: false

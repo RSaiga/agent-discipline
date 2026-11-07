@@ -17,7 +17,7 @@ Write only inside `<root>/.agent-discipline/`. Never change Git config, `.gitign
      With no catalog in the project, offer to copy the kit's starter catalog into `.agent-discipline/`; if declined, set `lenses: []`.
    - `lenses.structure.catalog_auto_loaded`: その規約が、フォルダを対象にして自動で読み込まれる設定になっているなら `true`。分からなければ `false`。
    - `tdd.suites`: プロジェクトが実際に使っているテストのコマンド（README、タスクランナー、パッケージの scripts など）。全体と 1 本に絞る形を、試さずに書けるものだけ書く。
-     `speed` は分からなければ書かず、そのことを伝える（`ad-cycle` が最初の全体の実行で決める。単独の段では `slow` として扱う）。
+     `speed` は分からなければ書かず、そのことを伝える（`tdd-cycle` が最初の全体の実行で決める。単独の段では `slow` として扱う）。
    - `tdd.tests`: 既存のテストの置き場所と、倣うお手本にできるテストのファイル。
    - `tdd.checks`・`tdd.known_failures`・`tdd.hooks`・`tdd.rules`: プロジェクトから読み取れたものだけ。無ければ `none`。既知の失敗は推測で書かない。
    - `tdd.acceptance`・`tdd.stack`: 受け入れテスト（外からスタックを動かして確かめるテスト）があれば、`tdd.md`「プロジェクトの情報」の表のキーを

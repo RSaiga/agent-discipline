@@ -1,0 +1,6 @@
+interface:
+  display_name: "refactor"
+  short_description: "Restructure outside TDD, only where tests guard"
+
+policy:
+  allow_implicit_invocation: false

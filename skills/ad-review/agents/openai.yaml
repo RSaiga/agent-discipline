@@ -1,6 +1,0 @@
-interface:
-  display_name: "ad-review"
-  short_description: "Review the change through the project's lenses"
-
-policy:
-  allow_implicit_invocation: false

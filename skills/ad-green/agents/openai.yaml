@@ -1,6 +1,0 @@
-interface:
-  display_name: "ad-green"
-  short_description: "Make the failing test pass"
-
-policy:
-  allow_implicit_invocation: false

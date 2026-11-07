@@ -1,0 +1,6 @@
+interface:
+  display_name: "tdd-plan"
+  short_description: "Plan the TDD test list"
+
+policy:
+  allow_implicit_invocation: false
