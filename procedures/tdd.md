@@ -18,7 +18,7 @@ Handles both the single layer and the double loop, stage by stage or end to end 
 2. **テストを消さない・飛ばさない・期待値を緩めない。** 落ちているテストは情報である。例外は、リストの `[change]`・`[remove]` の項目だけ
    （承認された仕様の変更を出典に、red で既存のテストを書き換える・消す）。
    Never delete, skip, or weaken a test. Only `[change]` / `[remove]` items, backed by an approved spec change, may, in RED.
-   もう 1 つの例外は、外側が緑になった直後の**外側の棚卸し**（`refactor.md`）。
+   ほかの例外は、外側が緑になった直後の**外側の棚卸し**と、type 2 での**未コミットの新しいテスト 1 本の取り消し**（どちらも `refactor.md`）。
 3. **その段階に要るファイルだけを触る。** / Touch only what the stage needs.
 4. **段階の最後に、実際にテストを走らせて、生の結果を報告する。** 「通るはず」で終えない。走らせる範囲は下の「どこまで走らせるか」。
    End every stage with a real test run and its actual output.

@@ -1,6 +1,6 @@
 ---
 name: tdd-refactor
-description: TDD refactor: restructure while green, without changing behavior or assertions.
+description: TDD refactor: restructure while green, without changing behavior or assertions. No argument tidies the last green; type2 makes the change easy after green stopped for a big structural change; outer reviews the inner tests after a scenario goes green.
 disable-model-invocation: true
 ---
 
@@ -12,8 +12,8 @@ disable-model-invocation: true
 
 次の往復で、`.agent-discipline/lists/<ブランチ>.md`（ブランチ名の `/` は `-`）と `profile.md` の `tdd.rules` の規約、`lenses/structure.md` と `lenses.structure.catalog` をまとめて読む。どれもファイルとして 1 回だけ開く（リストはあとで書き換える。シェルの出力で読んだものを開き直さない）。
 
-そのあと、動く条件を確かめてから `procedures/refactor.md` を実行する。呼び出しに続く文字列があれば、直したい箇所の指定として扱う。
+そのあと、動く条件を確かめてから `procedures/refactor.md` を実行する。呼び出しに続く文字列のうち、`type2`・`outer` は型の指定、それ以外は直したい箇所の指定として扱う。
 
 In the first turn, together: read `procedures/discipline.md`, `procedures/tdd.md`, `procedures/refactor.md`, and run the command above in the project's current directory, not the plugin
 (re-read with the root path only if the current directory is not the root). In the next turn, read the test list `.agent-discipline/lists/<branch>.md` (`/` in the branch name becomes `-`) and the `tdd.rules` files, plus `lenses/structure.md` and the structure catalog, together — each opened once as a file (the list is edited later; never re-open what a shell command already printed). Then check the activation conditions and run
-`procedures/refactor.md`. Any text after the invocation names what to restructure.
+`procedures/refactor.md`. `type2` or `outer` after the invocation picks the kind; any other text names what to restructure.
