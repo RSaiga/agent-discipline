@@ -14,7 +14,9 @@
    Pass it the simplest way; fake it until the next test forces generality. The skeleton connects every layer as thinly as possible against
    the outer scenario alone, with no inner tests — the one green that may span layers.
 3. **止まる場合:**
-   - 通すのに大きな構造の変更が要る → 実装せずに、何がその変更を難しくしているかを報告して止まる（先に構造を整えるかはユーザーが決める）。
+   - 通すのに大きな構造の変更が要る → 実装せずに、何がその変更を難しくしているかを報告して止まる。次は `refactor` の type 2
+     （変更を簡単にしてから、簡単な変更をする。`refactor.md`）と伝える。先に構造を整えるかはユーザーが決める。
+     A big structural change needed → stop, say what makes it hard, and point to refactor type 2.
    - 変更が 1 つの責務に収まらない（最初の通り道を除く） → その項目は大きすぎる。小さな例への割り方を提案して止まる（リストは書き換えない）。
    - テストの側が間違っていると判断した → 直さずに止まる（red のやり直しになる）。
 4. **テストを走らせる**（`tdd.md`「どこまで走らせるか」の green）。
