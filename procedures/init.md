@@ -12,9 +12,8 @@ Write only inside `<root>/.codence/`. Never change Git config, `.gitignore`, or 
    - `code`: リポジトリに実際にある実装の拡張子。
    - `examples`: リポジトリにある言語のうち、キットの `examples/` に言語パックがあるものをすべて、一覧で（例 `[rust, typescript]`。`typescript`・`rust`・`go`・`python`・`java`・`php`・`ruby`・`csharp`。Kotlin は `java`）。1 つも無ければ `none`。
    - `lenses.structure.catalog`: プロジェクトのリファクタリングの規約やカタログ。推測で作らない。
-     見つからなければ、キットの `templates/refactoring.md`（汎用のカタログ）を `.codence/refactoring.md` に置いてそこを指す案を、
-     下書きに含めて聞く。断られたら `catalog` は空のまま、`config.yaml` の `lenses` を `[]` にし、構造の観点が働かないことを伝える。
-     With no catalog in the project, offer to copy the kit's starter catalog into `.codence/`; if declined, set `lenses: []`.
+     見つからなければ空のままにし、構造の観点は観点のファイルにある汎用の項目だけで働くことを伝える。
+     With no catalog in the project, leave it empty; the structure lens then runs on its generic items.
    - `lenses.structure.catalog_auto_loaded`: その規約が、フォルダを対象にして自動で読み込まれる設定になっているなら `true`。分からなければ `false`。
    - `tdd.suites`: プロジェクトが実際に使っているテストのコマンド（README、タスクランナー、パッケージの scripts など）。全体と 1 本に絞る形を、試さずに書けるものだけ書く。
      `speed` は分からなければ書かず、そのことを伝える（`tdd-cycle` が最初の全体の実行で決める。単独の段では `slow` として扱う）。
@@ -31,7 +30,7 @@ Write only inside `<root>/.codence/`. Never change Git config, `.gitignore`, or 
    - `lenses`（`config.yaml`）: 使える観点を**すべて**下書きに並べ、プロジェクトを読んで、観点ごとに「入れる案／入れない案」と根拠（見つけたファイル）を書く。
      | 観点 | 入れる案にする目安 |
      |---|---|
-     | `structure` | 常に（カタログがあるか、汎用のカタログを置いたとき） |
+     | `structure` | 常に |
      | `security` | 外から呼ばれる口がある（HTTP のルート・CLI の入力・Webhook・メッセージの受け口） |
      | `concurrency` | 非同期の処理、DB への書き込み、ジョブ・定期実行、プロセス内のキャッシュがある |
      | `isolation` | テナント（組織・利用者ごとのデータ）がある、またはテストが DB・ファイル・環境変数を共有している |

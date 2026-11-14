@@ -587,3 +587,16 @@ GitHub への public 作成と push はユーザーが行う（またはユー�
   プロジェクトのフォルダ（`.codence/`）、GitHub のリポジトリ（`RSaiga/codence`。古い URL は GitHub が転送する）、bench の作業場所（`~/.cache/codence-bench`）。
 - 候補の `ratchet`・`cadence` は、AI のコーディングの規律の分野で同じ名前のプラグインが既にあった（`ratchet@ratchet`、`cadence@cadence` など）。`codence` は見当たらなかった。
 - 古いフォルダ名を読む互換は入れない（使っているプロジェクトは手元の 1 つだけ）。この文書のこれより前の記述も、名前は置き換えてある。
+
+## 追加（2026-11-14）structure の汎用の項目（0.3.1）
+
+- これまで structure の観点は、プロジェクトのカタログ**だけ**を基準にしていた（置き換え）。カタログがあると、キット付属の汎用のカタログ（`templates/refactoring.md`）は一切読まれず、
+  プロジェクトのカタログに無い匂いは指摘されなかった。security・concurrency・isolation は汎用の項目を観点のファイルに持ち、プロジェクトの項目を足す形（足し算）で、structure だけが違っていた。
+- 0.3.1 で structure も足し算にした: 汎用の 6 項目（Duplicated Code・Feature Envy・Long Function・Mysterious Name・Data Clumps・Primitive Obsession）を `lenses/structure.md` に持たせ、
+  カタログは任意にした。カタログを先に疑い、同じ匂いならカタログの名前と定義が勝つ。`templates/refactoring.md` は消し、init はカタログが無ければ空のままにする（構造の観点は入れる）。
+- bench（51 回、$12.50）:
+  - 導入先の 4 課題（大きなカタログ）: 新版はどれも 3/3（旧版は 1 課題で 2/3）。費用は平均 −5%。指摘はすべて導入先のカタログを根拠にした。
+  - 練習用のプロジェクト（カタログに 4 つだけ）で、カタログに無い匂い: Primitive Obsession・Data Clumps とも、旧版 0/3、新版 3/3。
+  - カタログ無し: 止まらずに 3/3、根拠はすべて観点のファイル。
+  - 第 1 段の改善の課題 2 つは、課題の作りの欠陥（指摘の上限が狭い、PO と DC の競合）で新版も不合格。基準どおり不合格と記録し、作り直した課題で判定した。
+- 気になる点: カタログの薄いプロジェクトでは、指摘が 1 件ほど増える傾向がある（規則の無い名前の組を Primitive Obsession と呼んだ例が 2 回）。

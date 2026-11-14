@@ -1,15 +1,30 @@
 # structure — 構造の観点 / Structure lens
 
-変更を、プロジェクトのリファクタリングのカタログ（`profile.md` の `lenses.structure.catalog`）に照らして読み、
+変更を、下の汎用の項目と、プロジェクトのリファクタリングのカタログ（`profile.md` の `lenses.structure.catalog`。無くてよい）に照らして読み、
 構造の問題（code smell）を**名前つき**で指摘し、取るべき手当て（move）を示す。挙動の問題（バグ）はこの観点では扱わない。
-Read the change against the project's refactoring catalog, name each smell, and propose the move. Bugs are out of scope.
+Read the change against the generic items below and the project's refactoring catalog (optional), name each smell, and propose the move. Bugs are out of scope.
 
 ## 基準 / The rubric
 
-- **判定の基準は常にカタログ。** このファイルにも記憶にも smell の一覧を持たない。カタログの定義と、そこが指す根拠（各 smell の置き場所）を使う。
-  The catalog is the only rubric; never rely on a list kept here or in memory.
-- **疑う順番は、カタログの並び順。** カタログが優先度を書いていれば、その順に疑う。
-  Suspect smells in the catalog's order of priority.
+- **判定の基準は、下の項目とプロジェクトのカタログだけ。** 記憶にある smell の一覧は使わない。カタログの定義と、そこが指す根拠（各 smell の置き場所）を使う。
+  The rubric is the items below plus the project's catalog; never rely on a list kept in memory.
+- **カタログを先に疑う。** 順番はカタログの並び順（優先度が書いてあればその順）。そのあとで、下の項目のうちカタログに無いものを疑う。
+  Suspect the catalog first, in its order; then the items below that the catalog lacks.
+- **カタログが勝つ。** 同じ名前の smell がカタログにあれば、カタログの定義を使う。名前が違っても同じ匂いを指していれば、カタログの名前で指摘する。
+  The catalog wins: same name → its definition; same smell under another name → its name.
+
+## 項目 / Items
+
+カタログが無くても、カタログに載っていなくても、この 6 つは疑う。 / Always suspect these six, catalog or not.
+
+| smell | 疑うところ | 直し方 |
+|---|---|---|
+| Duplicated Code | 同じ規則や計算が 2 か所にある | 1 つの関数か型に置き、両方からそれを呼ぶ |
+| Feature Envy | ほかのモジュールのデータばかり読む関数 | その処理をデータのそばへ移す |
+| Long Function | いくつものことを順にしている関数 | 段ごとに名前を付けて切り出す |
+| Mysterious Name | 何のためのものかを語らない名前 | 目的に合わせて名前を変える |
+| Data Clumps | いつも一緒に渡される値の組 | 1 つの型にまとめる |
+| Primitive Obsession | 意味と規則を持つ値が、素の文字列や数値のまま扱われている | 規則を持つ小さな型にする |
 
 ## 読み方 / How to read
 
@@ -43,7 +58,7 @@ Read the change against the project's refactoring catalog, name each smell, and 
 ### [<smell 名>] — <file>:<line>  (確信度: 高/中/低)
 - 何が問題か: <その行がなぜその smell か。1〜2 行>
 - 提案する move: <具体的な手当て>
-- 根拠: <カタログのファイル> → "<smell 名>"
+- 根拠: <カタログのファイル、または lenses/structure.md> → "<smell 名>"
 ```
 
-`<smell 名>` はカタログの見出しの名前をそのまま使う。 / Use the catalog's own smell names.
+`<smell 名>` は、カタログの見出しか上の項目の名前をそのまま使う。 / Use the catalog's or the items' own smell names.

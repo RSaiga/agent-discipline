@@ -49,7 +49,7 @@ TDD runs as a **single layer** (inner tests only) or a **double loop** (acceptan
 
 | 観点 / Lens | 見るもの / What it checks |
 |---|---|
-| structure | リファクタリングのカタログに載っている code smell。カタログはプロジェクトのものを使い、無ければキット付属の汎用カタログを使う / code smells from the project's (or the kit's starter) catalog |
+| structure | code smell。汎用の 6 つ（重複・Feature Envy など）を常に疑い、プロジェクトのリファクタリングのカタログがあれば、それを先に疑う（同じ匂いならカタログの名前と定義が勝つ） / code smells: six generic ones always, plus the project's catalog first when it has one |
 | security | 認可・テナント分離・入力の境界・内部の漏れ・秘密・注入・外からの呼び出しの検証（SEC-1〜7）/ authorization, tenancy, input bounds, leaks, secrets, injection, webhook checks |
 | concurrency | 確かめてから書き込むまでの間に別の処理が割り込む競合、冪等性、トランザクション、複数インスタンス、共有の状態など（CON-1〜8）/ races, idempotency, transactions, shared state |
 | isolation | データが混ざらないか。本番では、テナントの絞り込み、テナントをまたぐ集計、キャッシュとセッションのキー、非同期の処理への引き継ぎ、別のテナントのデータの存在の漏れを見る。テストでは、テスト同士がデータ・共有の状態・並列実行の資源を取り合わないかを見る（ISO-1〜8）/ tenant isolation and test isolation |
@@ -105,7 +105,6 @@ Renamed from `agent-discipline` in 0.3.0: uninstall and reinstall, and rename ea
 │                   # how the kit runs: runner, lenses, commit policy and language
 ├── lists/          # TDD のテストのリスト（ブランチごと）。キットはコミットしない（チームで共有するときは手順 2 で除外する）/ per-branch TDD test lists, never committed by the kit
 ├── backlog.md      # backlog: file のとき、tdd-plan が分けたストーリー / stories tdd-plan split out, with backlog: file
-├── refactoring.md  # プロジェクトにカタログが無いときに init が置く、キット付属の汎用カタログ / the kit's starter catalog, when the project has none
 └── findings.md     # retro の記録 / retro's log
 ```
 
