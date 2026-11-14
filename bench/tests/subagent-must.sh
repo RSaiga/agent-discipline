@@ -2,7 +2,7 @@
 # Check grade.sh's subagent-must: it reads what a started subagent returned, not the final answer.
 set -euo pipefail
 here="$(cd "$(dirname "$0")/.." && pwd)"
-tmp="$(mktemp -d "${TMPDIR:-/tmp}/ad-bench-sub.XXXXXX")"
+tmp="$(mktemp -d "${TMPDIR:-/tmp}/codence-bench-sub.XXXXXX")"
 trap 'rm -rf "$tmp"' EXIT
 fail() { echo "FAIL: $*" >&2; exit 1; }
 printf 'subagent-must db\\.ts:\\d+\n' > "$tmp/expect"

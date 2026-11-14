@@ -45,9 +45,9 @@ Project-specific facts come from the profile's `tdd` block; never guess what it 
 
 ## テストのリスト / The test list
 
-- **置き場:** `<根元>/.agent-discipline/lists/<ブランチ>.md`（ブランチ名の `/` は `-` にする）。worktree では、その worktree の根元。
+- **置き場:** `<根元>/.codence/lists/<ブランチ>.md`（ブランチ名の `/` は `-` にする）。worktree では、その worktree の根元。
   ツールの設定ディレクトリやプラグインの置き場には書かない。
-  Lives at `<root>/.agent-discipline/lists/<branch>.md`; never under a tool's config folder.
+  Lives at `<root>/.codence/lists/<branch>.md`; never under a tool's config folder.
 - **ブランチを持たない（detached）ときや、そのブランチのリストが無いときは、止まって伝える。** 別のブランチのリストを使わない。
 - **リストを書けないとき**（権限が無い、書き込みが失敗した）は、**止まって報告する。** 状態を残せないまま進めない。
   If the list cannot be written, stop and report — never carry on without the state.

@@ -1,9 +1,9 @@
 {
-  "name": "agent-discipline",
-  "interface": { "displayName": "agent-discipline" },
+  "name": "codence",
+  "interface": { "displayName": "codence" },
   "plugins": [
     {
-      "name": "agent-discipline",
+      "name": "codence",
       "source": { "source": "local", "path": "./" },
       "policy": { "installation": "AVAILABLE" }
     }

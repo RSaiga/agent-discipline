@@ -1,6 +1,6 @@
 interface:
   display_name: "init"
-  short_description: "Set up agent-discipline for this project"
+  short_description: "Set up codence for this project"
 
 policy:
   allow_implicit_invocation: false

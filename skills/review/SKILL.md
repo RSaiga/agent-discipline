@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 最初の 1 回の往復で、次を**まとめて**行う:
 - `procedures/discipline.md` と `procedures/review.md` を読む。
-- `git rev-parse --show-toplevel; cat .agent-discipline/profile.md .agent-discipline/config.yaml` を、プラグインではなく**プロジェクトの現在のディレクトリで**実行する（現在のディレクトリが根元でなく読めなかったときだけ、根元のパスで読み直す）。
+- `git rev-parse --show-toplevel; cat .codence/profile.md .codence/config.yaml` を、プラグインではなく**プロジェクトの現在のディレクトリで**実行する（現在のディレクトリが根元でなく読めなかったときだけ、根元のパスで読み直す）。
 
 そのあと、動く条件を確かめてから `procedures/review.md` を実行する。呼び出しに続く文字列があれば、レビューの対象の指定として扱う。`--second` があれば、それを対象から外し、`procedures/second-opinion.md` も読んで従う。
 

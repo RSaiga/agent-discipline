@@ -1,11 +1,11 @@
-# agent-discipline — 計画書（第 7 版）
+# codence — 計画書（第 7 版）
 
 AI コーディングエージェントに開発の規律を持たせるキット。中心は **観点チェック（lenses）**。
 TDD などの **進め方（flows）** は、決まった時点で観点チェックを呼ぶ。
 個人用 TDD キット（`tdd` スキルと `/tdd-*` コマンド）と、チームで使っている smell 検出スキルを土台に、
 重なりを整理して作り直す。
 
-- リポジトリ: `RSaiga/agent-discipline`（public、MIT）。ローカル: `~/workspace/RSaiga/agent-discipline`
+- リポジトリ: `RSaiga/codence`（public、MIT）。ローカル: `~/workspace/RSaiga/codence`
 - 入口の名前: TDD の入口は `tdd-`（`tdd-plan` など）、ほかは接頭辞なし（`init`・`review`・`retro`）。プラグインの名前空間が頭に付く（2026-11-07 に `ad-` から変えた）
 - 本文: 日英併記（bench で英語だけの版と比べ、採用の基準を満たせば切り替える）
 - 対応するツール: Claude Code と Codex。他のツールには今は対応しないが、**あとで対応できなくなる作りにはしない**
@@ -40,7 +40,7 @@ Codex は「自動起動が止まる」を必須の条件、「説明文が渡�
 |---|---|
 | 配布 | Claude Code と Codex のプラグイン（marketplace）。自作 installer は作らない |
 | 入れる範囲と版 | ユーザー単位で 1 つの版。プロジェクトごとの版の固定は、必要になってから検討する |
-| 動く条件 | 呼ばれたスキルが、プロジェクトの根元に `.agent-discipline/profile.md` があるかを確かめる（「動く条件」の節） |
+| 動く条件 | 呼ばれたスキルが、プロジェクトの根元に `.codence/profile.md` があるかを確かめる（「動く条件」の節） |
 | プロジェクト固有の差分レビュー | 各プロジェクトに残す。将来、プロファイルに「プロジェクト独自の観点」として登録できるようにする |
 | Codex による計画レビュー | キットには入れない。`runner: codex` で任意のレビューを Codex にかけられる差し込み口だけ作る |
 | 計画 | `tdd-plan` を土台にし、ストーリー分解・ストーリーの詰め・スライス計画・計画の組み直しまで扱う（後半） |
@@ -56,7 +56,7 @@ Codex は「自動起動が止まる」を必須の条件、「説明文が渡�
 リポジトリの直下が、Claude Code と Codex 両方のプラグインの根元になる（Claude は根元の外のファイルを参照できないため）。
 
 ```
-agent-discipline/
+codence/
 ├── .claude-plugin/            # plugin.json、marketplace.json
 ├── .codex-plugin/             # plugin.json（"skills": "./skills/"）。Codex の marketplace の形式はフェーズ 1 で確かめる
 ├── skills/                    # 入口のスキル（ユーザーが呼ぶ）。どれも短く、procedures/ の手順を読んで実行する
@@ -76,7 +76,7 @@ agent-discipline/
 プロジェクト側に置くのはこれだけ:
 
 ```
-<project>/.agent-discipline/
+<project>/.codence/
 ├── profile.md      # このプロジェクトの X（テストの配置・速度・お手本・観点ごとの追加項目）
 ├── config.yaml     # runner / router / commit / backlog / delegate_implementation
 └── findings.md     # retro の記録
@@ -92,7 +92,7 @@ agent-discipline/
 
 | 入口のスキル | 自動起動 | 読む手順 | 書き込み | コミット |
 |---|---|---|---|---|
-| init | 不可 | init | `.agent-discipline/` だけ | 不可 |
+| init | 不可 | init | `.codence/` だけ | 不可 |
 | review | 不可 | discipline、lenses/* | 不可（読むだけ） | 不可 |
 | retro | 不可 | retro | findings.md だけ | 不可 |
 | tdd-plan | 不可 | discipline、plan | 計画ファイルだけ | 不可 |
@@ -123,10 +123,10 @@ agent-discipline/
 
 | 使い方 | Claude Code | Codex |
 |---|---|---|
-| 自分がすべてのプロジェクトで使う | marketplace を追加し、ユーザー単位でインストール | `codex plugin marketplace add RSaiga/agent-discipline` → `codex plugin add agent-discipline@<marketplace 名>` |
+| 自分がすべてのプロジェクトで使う | marketplace を追加し、ユーザー単位でインストール | `codex plugin marketplace add RSaiga/codence` → `codex plugin add codence@<marketplace 名>` |
 | キットを開発する | `claude --plugin-dir <ローカルのチェックアウト>`。ローカルのパスの marketplace でも、根元は元のフォルダを指す（キャッシュのコピーは使われない。gitignore したファイルもコピーされる） | ローカルのパスを marketplace に追加 |
 | 更新 | `claude plugin marketplace update <名前>` → `claude plugin update <plugin>@<名前>` → 再起動（marketplace の更新だけでは本体は変わらない。古い版のフォルダはキャッシュに残る） | `codex plugin marketplace upgrade <名前>` だけで本体も入れ替わる（確認済み） |
-| チームで揃える | プロジェクト単位のインストール（設定ファイルに 1 行）。その場合、`.agent-discipline/` 以外にも設定ファイルが 1 つ変わる | `.codex/config.toml` での有効化。同上 |
+| チームで揃える | プロジェクト単位のインストール（設定ファイルに 1 行）。その場合、`.codence/` 以外にも設定ファイルが 1 つ変わる | `.codex/config.toml` での有効化。同上 |
 
 - bench の記録には、キットのコミットを必ず残す。
 
@@ -196,7 +196,7 @@ security と concurrency の汎用項目（たたき台）:
 
 ### フェーズ 0 — 最小の bench と、旧版の基準値（完了）
 - 済: `run.sh`、`grade.sh`（Codex レビュー第 2 回の 8〜12 を反映）、`bench/tests/flow.sh`（偽の CLI での通し）、サブエージェントの分の検算（一致）、structure の課題 2 本と TDD の課題 1 本（`check.sh` で複製の状態を採点）、旧版の基準値（3 本とも 3/3）、`bench/criteria.md`。
-- フェーズ 1 に持ち越す気づき: 未信頼の複製ではプロジェクトの許可が無視されるので、bench は許可を引数で固定する。`~/.claude/` の下はヘッドレスでは編集できないので、状態は導入先の `.agent-discipline/` に置く。構造の課題でキャッシュへの書き込みが毎回約 3.5 万トークンある原因を調べる。
+- フェーズ 1 に持ち越す気づき: 未信頼の複製ではプロジェクトの許可が無視されるので、bench は許可を引数で固定する。`~/.claude/` の下はヘッドレスでは編集できないので、状態は導入先の `.codence/` に置く。構造の課題でキャッシュへの書き込みが毎回約 3.5 万トークンある原因を調べる。
 - **完了の判定:**
   - 必須の課題: structure の 2 本と TDD の 1 本を、旧版で各 3 回。
   - 基準: 3 本とも `run_error` が 0 件。サブエージェントの分の検算が合っている。
@@ -219,7 +219,7 @@ security と concurrency の汎用項目（たたき台）:
   - フェーズ 1 で必須にする設定は最小にする。`profile.md`: プロジェクトのリファクタリング規約の場所。`config.yaml`: `runner: inline`（旧版も inline なので条件を揃える。サブエージェントとの比較はフェーズ 4）、`lenses: [structure]`、`commit`。`router` などの後のフェーズの項目は、そのフェーズで足す。
 - **④ 完了の判定:**
   - 必須の課題（bench）: フェーズ 0 の structure の 2 本と、**調整に使わない評価用の structure の課題 1 本**を、旧版と新しい版で各 3 回（AB/BA）。1 回でも不合格なら両方を 6 回に増やす（`criteria.md`）。関係ない依頼で起動しないことの課題 1 本（stream で採点）。新しい版の `install.sh` は、複製に `profile.md` と `config.yaml` を置く（中身は `bench/local/`）。
-  - 必須の課題（機能の確認、各 1 回）: `profile.md` がない → `init` を案内して止まる。`config.yaml` の必須項目が欠けている → 足りない項目を示して止まる。サブフォルダと worktree から呼ぶ → その根元の `profile.md` を使う。`init` が作るのは `.agent-discipline/` の中だけ。`retro` が書くのは `findings.md` だけ。`review` の前後で、HEAD・作業ツリー・ignore されたファイルが変わらない。
+  - 必須の課題（機能の確認、各 1 回）: `profile.md` がない → `init` を案内して止まる。`config.yaml` の必須項目が欠けている → 足りない項目を示して止まる。サブフォルダと worktree から呼ぶ → その根元の `profile.md` を使う。`init` が作るのは `.codence/` の中だけ。`retro` が書くのは `findings.md` だけ。`review` の前後で、HEAD・作業ツリー・ignore されたファイルが変わらない。
   - 基準: `criteria.md` の採用の基準。機能の確認がすべて通る。個人用にするための除外の追加は、ユーザーが行う手順として案内だけする。
   - 証拠: 両ツールの検証の記録（実行したコマンドと出力）、②の測定と結論、bench の結果、機能の確認の記録。
 
@@ -229,13 +229,13 @@ security と concurrency の汎用項目（たたき台）:
   | Git から入れる | 通る（smart HTTP。dumb HTTP は shallow clone のため不可。`file://` は不可） | 通る（dumb HTTP でも可） |
   | 根元の `source: "./"` | 通る | 通る（marketplace は `.agents/plugins/marketplace.json`） |
   | 別のプロジェクトから手順とレンズを読む | 通る。`${CLAUDE_PLUGIN_ROOT}` がキャッシュのコピーを指す | 通る。置き換えは無いが、「この SKILL.md の 2 つ上」の書き方で、キャッシュのコピーを読んだ |
-  | 明示の呼び出し | `/agent-discipline:ad-probe` | `$agent-discipline:ad-probe`（名前空間が要る。`$ad-probe` では一覧に無く、モデルがファイルを検索した） |
+  | 明示の呼び出し | `/codence:ad-probe` | `$codence:ad-probe`（名前空間が要る。`$ad-probe` では一覧に無く、モデルがファイルを検索した） |
   | 更新して新しいセッションで版 B が読まれる | 通る（2 段階、上の「配布」） | 通る |
   | 自動起動を止めたときの説明文の費用（説明文 400 語、簡単な依頼の入力トークン） | プラグインなしと同じ（25,705）。止めないと +624 | プラグインなしと同じ（15,051）。止めないと +258 |
   - 止めたスキルは、両ツールともモデルのスキル一覧に載らない。ただし依頼文でキットの名前を出すと、モデルが設定ディレクトリを検索して見つけることがある（Codex で観測）。
   - `-c 'plugins."<id>".enabled=false'` は Codex の `exec` では効かなかった。比べるときは、プラグインを外した状態を基準にする。
   - `claude plugin details` が常時の費用の見積もり（~46 tok）を出すが、実測では 0 だった。見積もりではなく実測で判断する。
-  - **GitHub 経由（2026-11-06、`490b219`）:** `claude plugin marketplace add RSaiga/agent-discipline` → `claude plugin install agent-discipline@agent-discipline`、`codex plugin marketplace add RSaiga/agent-discipline` → `codex plugin add agent-discipline@agent-discipline` で入った。設定のないプロジェクトから `review` を呼ぶと、両ツールともキャッシュのコピー（0.0.1）の手順を読み、`init` を案内して止まった。
+  - **GitHub 経由（2026-11-06、`490b219`）:** `claude plugin marketplace add RSaiga/codence` → `claude plugin install codence@codence`、`codex plugin marketplace add RSaiga/codence` → `codex plugin add codence@codence` で入った。設定のないプロジェクトから `review` を呼ぶと、両ツールともキャッシュのコピー（0.0.1）の手順を読み、`init` を案内して止まった。
   - **結論:** 両ツールとも、根元をプラグインにした配布が成り立つ。入口のスキルの数は、自動起動を止めれば固定費にならない（段階ごとの入口を残しても費用はかからない）。
 
 - **② の結果（2026-11-05）:** キャッシュへの書き込みは、bench の不備ではなかった。システムプロンプトなどの前半（約 3.3 万）は、2 回目以降の実行では毎回キャッシュから読まれている。書き込みは会話の途中で足された内容で、次の 2 つだった。
@@ -263,7 +263,7 @@ security と concurrency の汎用項目（たたき台）:
 
 - **移すもの:** `procedures/` の red・green・refactor・commit と、`tdd-cycle` の単層モード。入口のスキル（`tdd-red` 〜 `tdd-commit`、`tdd-cycle`）は薄く残す。
 - **リスト（キットの状態）の約束:**
-  - 置き場は導入先の `.agent-discipline/lists/`。ツールの設定ディレクトリとプラグインのキャッシュには書かない。
+  - 置き場は導入先の `.codence/lists/`。ツールの設定ディレクトリとプラグインのキャッシュには書かない。
   - 名前はブランチ（worktree ならその根元）ごとに 1 つ。別のブランチのリストを再開しない。見つからなければ、作るか止まるかをユーザーに聞く。
   - リストはコミットに入れない（`tdd-commit` は対象のファイルを名指しでステージする）。
   - リストを書けないときは止まって報告する（旧版では同じ条件で割れた）。
@@ -297,7 +297,7 @@ security と concurrency の汎用項目（たたき台）:
 **ここで止めても、2a の単層のリストを自分で書かずに済む。** 二重ループのリストは作れるが、回せるのは 2b-2 から（それまでは二重ループのリストを渡されたら、そう伝えて止まる）。
 
 - **承認と書き込みの約束:**
-  - 書いてよいのは、そのブランチのリスト（`.agent-discipline/lists/<ブランチ>.md`）だけ。テスト・実装・`profile.md`・`config.yaml` は書かない。コミットしない。
+  - 書いてよいのは、そのブランチのリスト（`.codence/lists/<ブランチ>.md`）だけ。テスト・実装・`profile.md`・`config.yaml` は書かない。コミットしない。
   - 書く前に下書きを見せ、承認を待つ。承認がなければ書かずに止まる。承認の範囲は、見せた下書きそのもの（見せていない変更を足さない）。
   - すでにリストがあれば、中身と進み具合を示し、置き換えるか・足すか・やめるかを聞く。`[x]` と `[~]` の項目を黙って消さない。
 - **計画の中身:** 作業の種類とモード（新しい機能・既存の機能の変更・単層）、期待値の出典、受け入れシナリオ（Z → O → M の順、新しい機能の先頭は最初の通り道）、内側の見込み、既存のテストを書き換える `[change]`・消す `[remove]` の棚卸し、今回やらないこと、完了の条件。
@@ -426,7 +426,7 @@ security と concurrency の汎用項目（たたき台）:
     受け入れの観点も、`runner: command` ならこの経路で新しい文脈を得る（渡すものは受け入れの観点のもの）。Codex の例は README に書く。
   - 指紋に `git diff --cached` を足した（index だけの変更）。無視されたファイルは対象にしない。
   - Codex を親にする bench: bench 専用の `CODEX_HOME`（認証はシンボリックリンクで参照、利用者の `~/.codex` は変えない）に、キットの写しをローカルの marketplace として入れ、
-    入れた版をキャッシュのパスで記録する。呼び出しは `$agent-discipline:ad-<名前>`（フェーズ 1 の結果）。
+    入れた版をキャッシュのパスで記録する。呼び出しは `$codence:ad-<名前>`（フェーズ 1 の結果）。
     出力は `bench/codex-stream.py` で採点が読む形にする。Codex の出力はファイルの変更の中身を持たないので、中身で判定する採点（`outer-close`、`no-write-before-green` の中身の条件）は
     Codex の実行では合格にならない。Codex の実行は仕上がり（`check.sh`）と、パスと順番だけで決まる採点で見る。費用は USD ではなくトークンを別の列に記録する。
   - `delegate_implementation` は入れない。指揮側が書くのをやめれば書き手 1 人の約束とは両立するが、委任の約束（規約・書いてよい場所・失敗の返し方・指揮側の確かめ）を測らずに増やすことになるため。
@@ -463,7 +463,7 @@ security と concurrency の汎用項目（たたき台）:
 - plan の手順にストーリー分解とストーリーの詰めを足す。バックログは差し込み口から読み書きする。
 - **完了の判定:** 必須の課題は、大きめの課題 1 本をストーリーに分けてバックログに書くまで。基準は、分けたストーリーがそれぞれ外から観察できる振る舞いを持つこと（レビューで確かめる）。証拠は生成された計画とバックログの記録。
 - **決めたこと・結果（2026-11-07）:** plan.md の「材料を集める」で、外から見て別々に価値のある振る舞いが 2 つ以上あれば、リストの前にストーリーに分ける。
-  1 ストーリー = 外から見える 1 つの振る舞い（前提・きっかけ・結果）、価値の順、振る舞いで名付ける。承認のあとで `backlog: file`（`.agent-discipline/backlog.md`）に書き、
+  1 ストーリー = 外から見える 1 つの振る舞い（前提・きっかけ・結果）、価値の順、振る舞いで名付ける。承認のあとで `backlog: file`（`.codence/backlog.md`）に書き、
   最初のストーリーだけリストを作る。`backlog: mcp`（外の道具への差し込み）は作らない（道具ごとに違い、本文にツール名を書けないため）。
   評価: 読書の目標の依頼で 3/3（毎回 4 ストーリー、どれも API で確かめられる結果を持ち、段階の名前なし。$0.45〜0.59）。1 つの機能の計画は分けなかった（後戻りなし）。
 
@@ -515,7 +515,7 @@ GitHub への public 作成と push はユーザーが行う（またはユー�
 | bench が本物のリポジトリを壊す | 作業場所は `BENCH_ROOT` の下で目印のあるものだけ。setup は複製の中でだけ動かす |
 | bench が失敗を合格と記録する | 採点の前に実行の成否を確かめ、`run_error` を別に数える |
 | 本体にツール固有の語が入り、あとで他のツールに対応できなくなる | 「持ち運べるための約束」。push 前に本文を `.claude/`・`.codex/`・ツール名で grep する |
-| public に導入先の内部が漏れる | 例は架空のドメインで書く。導入先の内容は `.agent-discipline/` と `bench/local/` にだけ置く。push 前に、公開しないローカルの語リストで grep する |
+| public に導入先の内部が漏れる | 例は架空のドメインで書く。導入先の内容は `.codence/` と `bench/local/` にだけ置く。push 前に、公開しないローカルの語リストで grep する |
 | Jev に会社のコードを送る | 既定は off。その組織の判断が出るまで使わない |
 
 ## 追加（2026-11-07）review にプルリクエストの URL
@@ -580,3 +580,10 @@ GitHub への public 作成と push はユーザーが行う（またはユー�
 - bench（練習用のプロジェクト）: 計画で先頭が `[pin]` 6/6（おかしな動きは 3 回とも固定して報告）、`[pin]` → `[change]` の通しで全変異を検出 3/3。
   テストのある既存の課題の計画は main と品質 3/3 対 3/3、費用 −12%（差なし）、`[pin]` は置かれなかった。
 - 未確認: 依存を切らないと観察できないコードでの「提案して止まる」。
+
+## 追加（2026-11-14）名前を codence に変える（0.3.0）
+
+- `agent-discipline` から `codence`（code + dance + cadence）に変えた。プラグイン・marketplace の名前、呼び出しの接頭辞（`/codence:…`、`$codence:…`）、
+  プロジェクトのフォルダ（`.codence/`）、GitHub のリポジトリ（`RSaiga/codence`。古い URL は GitHub が転送する）、bench の作業場所（`~/.cache/codence-bench`）。
+- 候補の `ratchet`・`cadence` は、AI のコーディングの規律の分野で同じ名前のプラグインが既にあった（`ratchet@ratchet`、`cadence@cadence` など）。`codence` は見当たらなかった。
+- 古いフォルダ名を読む互換は入れない（使っているプロジェクトは手元の 1 つだけ）。この文書のこれより前の記述も、名前は置き換えてある。

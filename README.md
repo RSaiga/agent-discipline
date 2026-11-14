@@ -1,4 +1,9 @@
-# agent-discipline
+# codence
+
+> **名前の由来:** codence は、code と dance、それに cadence（一定のリズム、歩調）を重ねた造語。
+> AI と一緒にコードを書くことを、plan → red → green → refactor という決まった歩調で、踊るように刻み続ける。
+> **The name:** codence blends *code*, *dance*, and *cadence* (a steady rhythm) — writing code with an AI as a dance
+> kept to a steady step: plan, red, green, refactor.
 
 AI コーディングエージェントに、開発の規律を持たせるキット。Claude Code と Codex のプラグインとして動く。
 中心は **観点チェック（lenses）** で、変更を決まった観点で読み、名前の付いた指摘と次の一手を返す。TDD などの **進め方（flows）** は、その上に乗る。
@@ -15,7 +20,7 @@ At its core are **lenses**: read a change from a fixed perspective and return na
 
 | 入口 / Entry | すること / What it does |
 |---|---|
-| `init` | プロジェクトを読んで `.agent-discipline/` の設定を下書きし、了承を得てから書く / Drafts the project settings and writes them after you agree |
+| `init` | プロジェクトを読んで `.codence/` の設定を下書きし、了承を得てから書く / Drafts the project settings and writes them after you agree |
 | `review` | 観点で読む（structure・security・concurrency・isolation・acceptance）。対象は作業中の変更、ブランチか範囲、プルリクエストの URL、ファイルかディレクトリ。読むだけ / Reviews through the lenses: the working change, a branch or range, a pull request URL, or files and directories. Read-only |
 | `tdd-plan` | 変更のテストのリストを作る（モード、シナリオ、内側の項目、変わる既存のテスト）。大きな依頼は先にストーリーに分ける。承認のあとで書く / Plans the test list, splitting large requests into stories first; writes after approval |
 | `tdd-cycle` | テストのリストが尽きるまで回す。単層なら red → green → コミット → refactor、二重ループならシナリオごとに外側と内側を回す / Runs the TDD loop until the list is done, single layer or double loop |
@@ -47,38 +52,41 @@ The acceptance lens runs before a scenario closes. High-confidence security/conc
 
 **Claude Code**
 ```
-claude plugin marketplace add RSaiga/agent-discipline
-claude plugin install agent-discipline@agent-discipline
+claude plugin marketplace add RSaiga/codence
+claude plugin install codence@codence
 ```
-呼び出し / Invoke: `/agent-discipline:review`
+呼び出し / Invoke: `/codence:review`
 
 **Codex**
 ```
-codex plugin marketplace add RSaiga/agent-discipline
-codex plugin add agent-discipline@agent-discipline
+codex plugin marketplace add RSaiga/codence
+codex plugin add codence@codence
 ```
-呼び出し / Invoke: `$agent-discipline:review`（名前空間が要る / the namespace is required）
+呼び出し / Invoke: `$codence:review`（名前空間が要る / the namespace is required）
 
 **更新 / Update**
 
 | ツール / Tool | コマンド / Commands |
 |---|---|
-| Claude Code | `claude plugin marketplace update agent-discipline` → `claude plugin update agent-discipline@agent-discipline` → 再起動 / restart |
-| Codex | `codex plugin marketplace upgrade agent-discipline` |
+| Claude Code | `claude plugin marketplace update codence` → `claude plugin update codence@codence` → 再起動 / restart |
+| Codex | `codex plugin marketplace upgrade codence` |
+
+0.3.0 で `agent-discipline` から名前を変えた。古い名前で入れているなら、外して入れ直し、プロジェクトの `.agent-discipline/` を `.codence/` に名前を変える（`.git/info/exclude` の行も）。
+Renamed from `agent-discipline` in 0.3.0: uninstall and reinstall, and rename each project's `.agent-discipline/` to `.codence/` (and its line in `.git/info/exclude`).
 
 ## プロジェクトで使う / Use it in a project
 
 1. プロジェクトで `init` を呼ぶ。下書きを見て、足りない項目を埋めてから了承する。
    Invoke `init` in the project, review the draft, fill what is missing, and agree.
-2. 個人で使うなら、`.git/info/exclude` に `/.agent-discipline/` を足す。チームで共有するなら、コミットする。
-   For personal use, add `/.agent-discipline/` to `.git/info/exclude`; to share with the team, commit it.
+2. 個人で使うなら、`.git/info/exclude` に `/.codence/` を足す。チームで共有するなら、コミットする。
+   For personal use, add `/.codence/` to `.git/info/exclude`; to share with the team, commit it.
 3. `review` や `tdd-cycle` を呼ぶ。設定が無いプロジェクトでは、何もせずに `init` を案内して止まる。
    Invoke `review` or `tdd-cycle`. Without settings, an entry points to `init` and stops.
 
 プロジェクトに置くもの / What lives in the project:
 
 ```
-<project>/.agent-discipline/
+<project>/.codence/
 ├── profile.md      # このプロジェクトの事実: 言語、差分の基準、観点の基準（リファクタリングのカタログ）、テストのスイート・置き場所・既知の失敗など
 │                   # project facts: language, diff base, lens catalogs, test suites, test locations, known failures
 ├── config.yaml     # キットの動かし方: runner、使う観点、コミットの方針と言語
@@ -131,8 +139,8 @@ With `command`, the diff is sent to that service.
 Add `--second` to `review` or `tdd-plan` to have another AI read it too.
 
 ```
-/agent-discipline:review develop...HEAD --second
-/agent-discipline:tdd-plan <依頼 / request> --second
+/codence:review develop...HEAD --second
+/codence:tdd-plan <依頼 / request> --second
 ```
 
 ```yaml

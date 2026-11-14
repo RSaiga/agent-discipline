@@ -11,7 +11,7 @@ import json, re, shlex, sys
 
 src, code = sys.argv[1], int(sys.argv[2])
 out = lambda e: print(json.dumps(e, ensure_ascii=False))
-out({"type": "system", "subtype": "init", "plugins": [{"name": "agent-discipline"}], "driver": "codex"})
+out({"type": "system", "subtype": "init", "plugins": [{"name": "codence"}], "driver": "codex"})
 
 def unwrap(cmd):
     m = re.match(r"^/bin/(?:zsh|bash|sh) -lc (.*)$", cmd, re.S)
