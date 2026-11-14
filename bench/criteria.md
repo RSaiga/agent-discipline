@@ -1,10 +1,10 @@
 # 採用の基準 / Adoption criteria
 
-新しい版（キットの変更、手順の書き換え、軽量化）を採用するかは、**測る前に**この基準で決める。
+新しい版（キットの変更、手順の書き換え、軽量化）を採用するかどうかは、この基準で決める。基準は**測る前に**決めておく。
 数字を見てから基準を動かさない。基準そのものを変えるときは、変更をこのファイルに残してから測る。
 Decide adoption by these rules, written before measuring. Never move a threshold after seeing the numbers.
 
-許容値は、旧版の基準値（各課題 3 回）のばらつきから決めた。基準値の数字は導入先ごとに
+許容値は、旧版を各課題 3 回走らせた実測値のばらつきから決めた。この実測値（以下、基準値）は導入先ごとに
 `bench/local/baseline.md` に置く。
 Thresholds come from the spread of the old version's baseline (3 runs per task). The numbers
 themselves live per project in `bench/local/baseline.md`.
@@ -16,8 +16,8 @@ themselves live per project in `bench/local/baseline.md`.
 - **bench の不備で止まった実行は無効**にする（必要な権限が無い、課題の前提が足りない、など）。
   bench を直したら、**比べる全ての版を回し直す**。無効にした実行の ID と理由は `bench/local/baseline.md` に残す。
   A run stopped by a bench defect is void. After fixing the bench, rerun every variant being compared.
-- 権限で拒否された回数は記録する。必ず確認を求められる形（`$(...)`、`cd … && git …`）の拒否は失敗に数えない。
-  それ以外の拒否が版によって増えたら、6 の「振る舞い」として扱う。
+- 権限で拒否された回数は記録する。ツールが毎回確認を求めるコマンドの形（`$(...)`、`cd … && git …`）で拒否された分は、失敗に数えない。
+  それ以外の拒否が版によって増えたら、4 の「振る舞い」として扱う。
 
 ## 2. 品質 — 1 つでも満たさなければ不採用 / Quality — any miss rejects
 
@@ -25,10 +25,10 @@ themselves live per project in `bench/local/baseline.md`.
 |---|---|
 | 問題を仕込んだ差分 | 期待する指摘（名前と場所の組）を**全件**見つける。見逃しは 1 件でも不採用 |
 | 問題のない差分 | 指摘 0 件 |
-| TDD | `check.sh` の全項目が合格（範囲、緑、元のコードで赤、隠しテスト、結線、型） |
+| TDD | 課題ごとの `check.sh`（`bench/local/tasks/<課題>/`）の全項目が合格（範囲、緑、元のコードで赤、隠しテスト、結線、型） |
 | 止まるべき課題 | 止まる。回避して進んだら不合格 |
 
-- 基準値はどの課題も 3/3。新しい版で 1 回でも不合格が出たら、**両方の版を 6 回に増やして**比べる。
+- 旧版はどの課題も 3 回中 3 回合格している。新しい版で 1 回でも不合格が出たら、**両方の版を 6 回に増やして**比べる。
   6 回で新しい版の合格率が旧版より低ければ不採用。
   Baseline is 3/3 on every task. One failure in the new version → extend both to 6 runs; a lower
   pass rate at 6 rejects.
@@ -42,8 +42,8 @@ Compare the mean total cost per run. The baseline spread is up to ±16% (structu
 |---|---|
 | **15% 以上下がった** | 改善とみなす（2 を満たせば採用） |
 | 5〜15% 下がった | 判定しない。両方の版を 6 回に増やす。6 回でも 15% に届かなければ「差なし」 |
-| 5% 未満 | 差なし。どちらを残すかは、短い・単純な方を選ぶ |
-| 上がった | 2 で得るものが無ければ不採用 |
+| 5% 未満 | 差なし。手順が短く単純な方を残す |
+| 上がった | 品質（2）で旧版を上回る点が無ければ不採用 |
 
 - 回数を増やすときも、順番は AB / BA を入れ替える。1 回目（キャッシュなし）は別に見る。
 - トークンの内訳（キャッシュの読み込み・書き込み、出力）と往復の回数は記録する。判定には使わない。
@@ -51,17 +51,17 @@ Compare the mean total cost per run. The baseline spread is up to ±16% (structu
 
 ## 4. 振る舞い — 採点の外を読む / Behavior — read beyond the grader
 
-採点の項目に出ない違いを、回答とコミットを読んで記録する。新しい版で**基準値に無いずれが増えたら**、
+採点の項目に出ない違いを、回答とコミットを読んで記録する。新しい版で**旧版の実行には無かったずれが増えたら**、
 理由を説明できない限り品質の低下として扱う（2 と同じく不採用）。
 Read answers and commits for differences the grader can't see. A new deviation absent from the
 baseline counts as a quality regression unless explained.
 
 - 規律の範囲: 「今回やらない」に手を出さない、リストに無い項目を足さない、テストを緩めない。
-- 止まり方: 止まる条件に当たったとき、止まるか、回避して進むか。同じ条件で版の中でも割れていないか。
+- 止まり方: 止まる条件に当たったとき、止まるか、回避して進むか。同じ版の中で、同じ条件なのに止まる回と進む回に割れていないか。
 - コミット: 種類（feat / fix / refactor）、言語、1 コミット 1 意味、振る舞いとリファクタを混ぜない。
 - 報告: 決められた形式で、実行したコマンドと生の結果を示しているか。
 
 ## 5. 回数 / Number of runs
 
-- n=3 は当たりを付けるための探索。採用を決めるのは、2・3 で 6 回に増やした比較か、3 回で差がはっきりした比較。
+- n=3 は当たりを付けるための探索。採用を決めるのは、2 節・3 節の規則で 6 回に増やした比較か、3 回で差がはっきりした比較。
 - 調整に使った課題とは別に、評価用の課題を分けて持つ（同じ課題で調整と評価をしない）。

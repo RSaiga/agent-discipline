@@ -16,13 +16,21 @@ Issues and pull requests are welcome, in Japanese or English.
    One purpose per pull request. When a procedure or lens changes, say what changes and why.
 2. `bench/tests/*.sh` が通ること（GitHub Actions でも走る）。
    `bench/tests/*.sh` must pass (they also run in GitHub Actions).
-3. 手順や観点の振る舞いを変えるなら、bench の結果を添える。採用の基準は `bench/criteria.md`（結果が同じかそれ以上で、費用が下がるなら採用）。
+   ```
+   bench/tests/flow.sh          # run.sh の通し（偽の CLI）/ end-to-end check with a fake CLI
+   bench/tests/tdd-order.sh     # TDD の順番の採点 / the TDD order grader
+   bench/tests/outer-order.sh   # 外側のループの順番の採点 / the outer-loop order grader
+   bench/tests/subagent-must.sh # 新しい文脈で読んだ担当の返事の採点 / grading what a fresh-context lens returned
+   bench/codex-stream.py        # Codex の出力を採点が読む形にする（bench の版を Codex で走らせるとき）/ converts Codex events for the grader
+   bench/fixtures/              # 外側の段階を確かめる練習用のプロジェクト / a practice project for the outer-loop stages
+   ```
+3. 手順や観点の振る舞いを変えるなら、bench の結果を添える。採用の基準は `bench/criteria.md`（結果が落ちず、費用が下がるか、同じ費用でより単純になるなら採用）。
    測っていない変更は、測っていないと書く。
    Behaviour changes come with bench results; the adoption rule is in `bench/criteria.md`. Say so when something is unmeasured.
 4. 本文（`procedures/`・`lenses/`・`examples/`・`templates/`・入口の本文）にツールの名前やローカルのパスを書かない。
    例は架空の題材で書き、実在の組織・製品・人の名前を出さない。
    Keep the bodies tool-neutral and free of local paths; write examples in a fictional domain, never naming real organizations, products or people.
-5. 本文は日英併記（日本語の文のあとに英語の要約）。 / Bodies are bilingual: Japanese, then an English summary.
+5. 本文と README は日英併記（日本語の文のあとに英語の要約）。 / Bodies and the README are bilingual: Japanese, then an English summary.
 
 ## 版 / Versions
 
