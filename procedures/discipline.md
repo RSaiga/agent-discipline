@@ -26,7 +26,7 @@ Search first and open only what you need — opening a file can pull in the proj
 | `profile.md`（先頭の YAML） | `language` | 報告に使う言語（例 `ja`, `en`） | すべて |
 | | `diff_base` | 差分の基準にするブランチ | すべて |
 | | `code` | 実装のファイルとみなすパターンの一覧 | すべて |
-| | `lenses.<観点>.catalog` | `config.yaml` の `lenses` に挙げた観点ごとの、判定の基準のファイル（根元からの相対パス）。`structure` だけ必須。`security`・`concurrency`・`isolation` はプロジェクトが足す項目（無くてよい。汎用の項目は観点のファイルにある）。`acceptance` は要らない（基準はシナリオの出典） | すべて |
+| | `lenses.<観点>.catalog` | `config.yaml` の `lenses` に挙げた観点ごとの、判定の基準のファイル（根元からの相対パス）。どの観点もプロジェクトが足す項目で、無くてよい（空なら読まない。汎用の項目は観点のファイルにある）。`acceptance` は要らない（基準はシナリオの出典） | すべて |
 | | `tdd.suites` | テストのスイートの一覧（`tdd.md` の「プロジェクトの情報」） | TDD の入口、`refactor` |
 | `config.yaml` | `runner` | `inline`・`subagent`・`command`（`review.md`「観点を実行する」。`subagent` は任意で `runner_mode`（`parallel`・`combined`、既定は `parallel`）と `runner_model`、`command` は必須の `runner_command`（引数の配列）と任意の `runner_mode`） | すべて |
 | | `lenses` | 使う観点の一覧（`structure`・`acceptance`・`security`・`concurrency`・`isolation`）。`[]` なら観点を使わない（`review` は観点が無いと伝えて止まる）。`acceptance` は常に新しい文脈で動かす（`runner` に関わらない） | すべて |

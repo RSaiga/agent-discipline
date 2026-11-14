@@ -13,7 +13,7 @@
 ## 何のために整えるか / Why, how, what
 
 - **WHY — 変更に備える。** Getting ready for change.
-- **HOW — 匂いを取り除く。** 基準は `profile.md` の `lenses.structure.catalog`。 / Remove code smells.
+- **HOW — 匂いを取り除く。** 基準は `lenses/structure.md` の項目と `profile.md` の `lenses.structure.catalog`。 / Remove code smells.
 - **WHAT — 設計が残る。** 設計の時間を別に取るのではなく、輪の中で少しずつ。リファクタは片づけであり、設計でもある。
   Design emerges a little at a time inside the loop; refactoring is tidying and design at once.
 
@@ -46,7 +46,7 @@ Say which principle each change moves toward.
 ## type 1 — 散らかりを片づける / Tidy the mess green just left
 
 1. **緑であることを確かめる。** 直前の green の結果がまだ有効なら、それを使う。緑でなければ止まる。
-2. **直近の変更を読み、直す価値のある構造の問題を挙げる。** 基準は `profile.md` の `lenses.structure.catalog`
+2. **直近の変更を読み、直す価値のある構造の問題を挙げる。** 基準は `lenses/structure.md` の項目と `profile.md` の `lenses.structure.catalog`
    （`lenses/structure.md` の判定の心得に従う。`config.yaml` の `lenses` に `structure` が無ければ使わない）と、`tdd.rules` の規約。
    プロジェクトの規約に反している箇所を先に直す。基準がどちらも無ければ、そう伝えて何もしない。
    テストのコードも対象（準備の重複をまとめる、名前を直す）。ただし、何をどの値で確かめるか（アサーション、期待値、本数）は変えない。

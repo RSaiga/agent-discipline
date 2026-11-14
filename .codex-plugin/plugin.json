@@ -1,6 +1,6 @@
 {
   "name": "codence",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Development discipline for AI coding agents: perspective checks (lenses) and the flows that call them.",
   "author": { "name": "RSaiga" },
   "license": "MIT",
