@@ -1,7 +1,7 @@
 # init — プロジェクトに設定を置く / Set up a project
 
-書いてよいのは `<根元>/.agent-discipline/` の中だけ。Git の設定、`.gitignore`、ほかのファイルは変えない。
-Write only inside `<root>/.agent-discipline/`. Never change Git config, `.gitignore`, or any other file.
+書いてよいのは `<根元>/.codence/` の中だけ。Git の設定、`.gitignore`、ほかのファイルは変えない。
+Write only inside `<root>/.codence/`. Never change Git config, `.gitignore`, or any other file.
 
 1. **根元を決める**（`discipline.md` の「動く条件」の 1）。
 2. **すでにあるか確かめる。** `profile.md` か `config.yaml` があれば、中身を示し、上書きするかをユーザーに聞く。答えがなければ止まる。
@@ -12,9 +12,9 @@ Write only inside `<root>/.agent-discipline/`. Never change Git config, `.gitign
    - `code`: リポジトリに実際にある実装の拡張子。
    - `examples`: リポジトリにある言語のうち、キットの `examples/` に言語パックがあるものをすべて、一覧で（例 `[rust, typescript]`。`typescript`・`rust`・`go`・`python`・`java`・`php`・`ruby`・`csharp`。Kotlin は `java`）。1 つも無ければ `none`。
    - `lenses.structure.catalog`: プロジェクトのリファクタリングの規約やカタログ。推測で作らない。
-     見つからなければ、キットの `templates/refactoring.md`（汎用のカタログ）を `.agent-discipline/refactoring.md` に置いてそこを指す案を、
+     見つからなければ、キットの `templates/refactoring.md`（汎用のカタログ）を `.codence/refactoring.md` に置いてそこを指す案を、
      下書きに含めて聞く。断られたら `catalog` は空のまま、`config.yaml` の `lenses` を `[]` にし、構造の観点が働かないことを伝える。
-     With no catalog in the project, offer to copy the kit's starter catalog into `.agent-discipline/`; if declined, set `lenses: []`.
+     With no catalog in the project, offer to copy the kit's starter catalog into `.codence/`; if declined, set `lenses: []`.
    - `lenses.structure.catalog_auto_loaded`: その規約が、フォルダを対象にして自動で読み込まれる設定になっているなら `true`。分からなければ `false`。
    - `tdd.suites`: プロジェクトが実際に使っているテストのコマンド（README、タスクランナー、パッケージの scripts など）。全体と 1 本に絞る形を、試さずに書けるものだけ書く。
      `speed` は分からなければ書かず、そのことを伝える（`tdd-cycle` が最初の全体の実行で決める。単独の段では `slow` として扱う）。
@@ -41,7 +41,7 @@ Write only inside `<root>/.agent-discipline/`. Never change Git config, `.gitign
    Fill values from the project itself; leave unknowns empty and say so — never invent a catalog, a command, or a known failure.
 4. **下書きを見せて、ユーザーの了承を得てから書く。** / Show the draft; write only after the user agrees.
 5. **個人用か共有かを聞く。**
-   - 個人用: `.git/info/exclude` に `/.agent-discipline/` を足す方法を**案内するだけ**（自分では足さない）。
+   - 個人用: `.git/info/exclude` に `/.codence/` を足す方法を**案内するだけ**（自分では足さない）。
    - チームで共有: コミットしてよいと伝える（コミットはしない）。
    Ask personal or shared; only explain how to exclude or commit — do neither.
 6. 書いたファイルと、空のままの項目を報告する。 / Report what was written and what is still empty.

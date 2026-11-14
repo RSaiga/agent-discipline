@@ -1,7 +1,7 @@
 # retro — 振り返りを 1 件残す / Record one retrospective
 
-書いてよいのは `<根元>/.agent-discipline/findings.md` だけ。無ければ作る。追記だけで、既存の行は変えない。
-Write only to `<root>/.agent-discipline/findings.md`; create it if missing; append only.
+書いてよいのは `<根元>/.codence/findings.md` だけ。無ければ作る。追記だけで、既存の行は変えない。
+Write only to `<root>/.codence/findings.md`; create it if missing; append only.
 
 呼び出しに `track` が付いていたら、下の「対策を追う」だけを行う。 / With `track`, run only "Track countermeasures" below.
 

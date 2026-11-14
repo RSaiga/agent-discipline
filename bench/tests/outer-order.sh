@@ -4,7 +4,7 @@
 set -euo pipefail
 
 here="$(cd "$(dirname "$0")/.." && pwd)"
-tmp="$(mktemp -d "${TMPDIR:-/tmp}/ad-bench-outer.XXXXXX")"
+tmp="$(mktemp -d "${TMPDIR:-/tmp}/codence-bench-outer.XXXXXX")"
 trap 'rm -rf "$tmp"' EXIT
 fail() { echo "FAIL: $*" >&2; exit 1; }
 

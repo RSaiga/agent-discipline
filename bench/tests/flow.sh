@@ -5,7 +5,7 @@
 set -euo pipefail
 
 here="$(cd "$(dirname "$0")/.." && pwd)"
-tmp="$(cd "$(mktemp -d "${TMPDIR:-/tmp}/ad-bench-flow.XXXXXX")" && pwd -P)"
+tmp="$(cd "$(mktemp -d "${TMPDIR:-/tmp}/codence-bench-flow.XXXXXX")" && pwd -P)"
 trap 'rm -rf "$tmp"' EXIT
 fail() { echo "FAIL: $*" >&2; exit 1; }
 
@@ -74,7 +74,7 @@ assert calls.count("arg with spaces") == 4 and calls.count("*") == 4, "args were
 assert calls.count("/kit-a:review now") == 2 and calls.count("/kit-b:review now") == 2, "review command not substituted per variant"
 EOF
 
-[ -f "$tmp/root/work/.agent-discipline-bench-workdir" ] || fail "marker missing"
+[ -f "$tmp/root/work/.codence-bench-workdir" ] || fail "marker missing"
 [ "$(cat "$tmp/root/work/repo/f")" = changed ] || fail "setup did not run in the clone"
 [ "$(cat "$tmp/src/f")" = a ] || fail "source repo was modified"
 [ -z "$(git -C "$tmp/src" status --porcelain)" ] || fail "source repo is dirty"

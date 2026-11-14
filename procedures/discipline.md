@@ -15,9 +15,9 @@ Search first and open only what you need — opening a file can pull in the proj
 1. **プロジェクトの根元を決める。** `git rev-parse --show-toplevel` の結果。Git の管理外なら現在のディレクトリ。
    サブディレクトリで呼ばれても、根元のものを使う。worktree では、その worktree の根元を使う。
    The project root is `git rev-parse --show-toplevel`, or the current directory outside Git.
-2. **`<根元>/.agent-discipline/profile.md` を読む。** 無ければ「このプロジェクトはまだ設定されていない。`init` で設定できる」と伝えて止まる。
+2. **`<根元>/.codence/profile.md` を読む。** 無ければ「このプロジェクトはまだ設定されていない。`init` で設定できる」と伝えて止まる。
    No profile → say so, point to `init`, and stop.
-3. **`<根元>/.agent-discipline/config.yaml` を読む。** 無ければ 2 と同じく止まる。
+3. **`<根元>/.codence/config.yaml` を読む。** 無ければ 2 と同じく止まる。
 4. **必須の項目を確かめる。** 欠けている・値が読めない項目があれば、**どのファイルのどの項目か**を示して止まる。推測で補わない。
    Missing or unreadable required keys → name the file and key, and stop. Never fill them in by guessing.
 

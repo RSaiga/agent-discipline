@@ -4,7 +4,7 @@ about: 入口が期待どおりに動かない / An entry did not behave as expe
 labels: bug
 ---
 
-**呼んだ入口 / Entry**: （例 `/agent-discipline:tdd-cycle`）
+**呼んだ入口 / Entry**: （例 `/codence:tdd-cycle`）
 
 **ツールと版 / Tool and version**: （Claude Code x.y.z / Codex x.y.z、プラグイン 0.x.y）
 

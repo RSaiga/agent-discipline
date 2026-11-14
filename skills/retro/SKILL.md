@@ -1,6 +1,6 @@
 ---
 name: retro
-description: Record what was intended, what happened, and where work stopped, in .agent-discipline/findings.md; with "track", judge whether recorded countermeasures worked.
+description: Record what was intended, what happened, and where work stopped, in .codence/findings.md; with "track", judge whether recorded countermeasures worked.
 disable-model-invocation: true
 ---
 

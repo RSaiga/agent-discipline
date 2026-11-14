@@ -1,12 +1,12 @@
 {
-  "name": "agent-discipline",
+  "name": "codence",
   "owner": { "name": "RSaiga" },
   "plugins": [
     {
-      "name": "agent-discipline",
+      "name": "codence",
       "source": "./",
       "description": "Development discipline for AI coding agents: perspective checks (lenses) and the flows that call them.",
-      "version": "0.2.8"
+      "version": "0.3.0"
     }
   ]
 }

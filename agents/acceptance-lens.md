@@ -1,6 +1,6 @@
 ---
 name: acceptance-lens
-description: agent-discipline's acceptance lens. Started by the kit's accept procedure only; judges whether the implementation keeps a scenario's promise, read-only.
+description: codence's acceptance lens. Started by the kit's accept procedure only; judges whether the implementation keeps a scenario's promise, read-only.
 tools: Read, Grep, Glob
 ---
 

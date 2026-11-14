@@ -97,7 +97,7 @@ Keep the existing-test inventory in the list itself, with a reason for every "un
 2. **価値の順に並べる。** 前のストーリーだけで止めても使える順にする（どこで止めても、終えた数に見合う価値が残る）。
 3. **名前は振る舞いで付ける。** 段階の番号や作業の順番を名前にしない。
 4. **下書きを見せ、承認を得てから書く。** 書き先は `config.yaml` の `backlog`:
-   - `file`: `.agent-discipline/backlog.md` に、ストーリーごとに見出し（名前）と、前提・きっかけ・結果、出典を書く。すでにあれば、置き換えずに足す案を聞く。
+   - `file`: `.codence/backlog.md` に、ストーリーごとに見出し（名前）と、前提・きっかけ・結果、出典を書く。すでにあれば、置き換えずに足す案を聞く。
    - `none`（既定）: どこにも書かず、下書きを報告に残す。
 5. **最初のストーリーだけ、続けて 3 以降でリストを作る**（承認が別に要る）。ほかのストーリーは、そのストーリーを始めるときに `tdd-plan` を呼ぶ。
 Split by externally observable behaviour (pre-condition, trigger, post-condition), order by value so stopping anywhere still leaves value,

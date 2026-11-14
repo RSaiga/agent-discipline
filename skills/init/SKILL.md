@@ -1,6 +1,6 @@
 ---
 name: init
-description: Set up agent-discipline for this project: draft .agent-discipline/profile.md and config.yaml.
+description: Set up codence for this project: draft .codence/profile.md and config.yaml.
 disable-model-invocation: true
 ---
 

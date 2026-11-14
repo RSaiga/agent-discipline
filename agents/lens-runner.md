@@ -1,6 +1,6 @@
 ---
 name: lens-runner
-description: agent-discipline's read-only lens runner. Started by the kit's review procedure only; runs the lens files it is given against the working change.
+description: codence's read-only lens runner. Started by the kit's review procedure only; runs the lens files it is given against the working change.
 tools: Read, Grep, Glob, Bash
 ---
 

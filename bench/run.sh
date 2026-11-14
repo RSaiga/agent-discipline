@@ -41,7 +41,7 @@ source "$base"
 : "${SOURCE_REPO:?}" "${COMMIT:?}" "${BENCH_ROOT:?}" "${WORKDIR:?}" "${RESULTS:?}" "${MODEL:?}"
 : "${EFFORT:=medium}" "${SETTING_SOURCES:=project,local}" "${PRICES:=$here/prices.json}" "${CLONE:=repo}"
 
-MARKER=".agent-discipline-bench-workdir"
+MARKER=".codence-bench-workdir"
 resolve() { python3 -c 'import os,sys; print(os.path.realpath(sys.argv[1]))' "$1"; }
 inside() { case "$1/" in "$2"/*) return 0 ;; *) return 1 ;; esac; }
 
