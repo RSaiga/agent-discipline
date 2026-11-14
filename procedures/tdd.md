@@ -66,13 +66,24 @@ Project-specific facts come from the profile's `tdd` block; never guess what it 
   - <項目> — 理由: <なぜ>
   ```
 - **印:** `[ ]` 未着手、`[~]` 着手中（red が付ける）、`[x]` 緑（green が付ける）。種類は ZOMBIES の頭文字（`[O/B]` など）か、
-  既存のテストを書き換える `[change]`、廃止する振る舞いのテストを消す `[remove]`。
+  既存のテストを書き換える `[change]`、廃止する振る舞いのテストを消す `[remove]`、今の動きを固定する `[pin]`（下の「テストの無いコードを変えるとき」）。
 - **二重ループのリスト**は `## 受け入れシナリオ` の下にシナリオ（`### [ ] A<n> <名前>`）を並べ、その下に内側の項目を置く（形式は `plan.md`）。
   シナリオの印: `[ ]` 未着手、`[~]` 進行中のタグを付けて書き、振る舞いで落ちるのを見た、`[x]` 緑になってタグを外した。**進行中の `[~]` のシナリオは常に 1 本だけ。**
   内側の項目は、進行中のシナリオの下から取る。
 - **項目を勝手に足さない。** 新しく要る振る舞いに気づいたら、報告して、足すかどうかはユーザーが決める。例外は 1 つだけ:
   承認されたシナリオの外側の失敗が示す、足りない振る舞いを 1 件、そのシナリオの内側に足す（`accept.md`。出典は「シナリオ A<n> の失敗」）。
   Never add items yourself — except the one inner item `accept.md` derives from an approved scenario's outer failure.
+
+## テストの無いコードを変えるとき / Changing untested code
+
+- 変更する関数を守るテストが無ければ、変更の項目より先に `[pin]` の項目を置き、関数全体を今の動きのまま固定する。
+  期待値は対象を実際に動かした出力から写す（絶対の規則 5 の (1)）。最初から緑でよい。
+- おかしな動きを見つけても直さずに固定し、報告する。直すかどうかは、ユーザーが別の項目として決める。
+- 入口からも依存の差し替えでも観察できないときは、依存の切り方を提案して止まる。テストを走らせる仕組みが無いときも、作らずに止まる。
+If no test guards the function you are changing, pin the whole function as it behaves today (`[pin]`, expected values copied
+from actual output, green from the start) before any change item. Pin odd behaviour as is and report it; never fix it.
+If it cannot be observed from an entry point or by substituting a dependency, propose how to cut the dependency and stop;
+with no way to run tests, stop without building one.
 
 ## どこまで走らせるか / How much to run
 

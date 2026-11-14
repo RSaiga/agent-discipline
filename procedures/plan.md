@@ -33,6 +33,9 @@ Write no code and no tests. The only file you may write is this branch's test li
   変わるものを `[change]`、廃止するものを `[remove]` の項目にする（受け入れテストも同じ）。変わらない振る舞いのテストは入れない。
   漏れると、green で既存のテストが落ちて止まる。
   For a change, search for every test pinning the old behavior and list it as `[change]` / `[remove]`; leave unchanged behavior alone.
+- **変更する関数を守るテストが無ければ、** `tdd.md`「テストの無いコードを変えるとき」のとおり、内側の先頭（二重ループなら最初のシナリオの内側の先頭）に
+  `[pin]` を置く。固定した期待値のうち変わるものは、そのあとに `[change]` として置く。
+  No test guards the function → `[pin]` items first; pinned values the change alters follow as `[change]`.
 
 ## 4. 考えて、並べる / Think, then order
 
@@ -50,6 +53,7 @@ Write no code and no tests. The only file you may write is this branch's test li
 - **すでに成り立つ振る舞いを項目にしない。** 共通の仕組み（認証のミドルウェア、共通の入力の検証、エラーの変換など）や、前の項目の実装で
   自然に成り立つものは、落ちるテストが書けない。項目にせず、「既存のテスト」の節に、どの仕組みが守っているか（とそのテストの名前）を書く。
   Never list a behaviour that already holds (shared middleware, a previous item); name what guards it under existing tests instead.
+  `[pin]` は例外（今の動きを固定するのが目的で、最初から緑になる）。 / `[pin]` is the exception.
 
 ## 5. 下書きを見せる / Present the draft
 

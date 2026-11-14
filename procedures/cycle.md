@@ -36,6 +36,8 @@ With `commit: never`, commit steps record a proposal in the report and the loop 
 5. **コミット（リファクタ）** — 4 で変えたときだけ。`refactor`。空のコミットを作らない。
 6. **次の項目へ。** 前の項目の気づきを持ち越さない。
 
+`[pin]` の項目は、red のあと 2〜5 を飛ばし、`test` の 1 コミットにする（`commit.md` がコミットを許すとき）。
+
 単層のリストは、これをリストが尽きるまで回して「抜けたら」へ進む。
 
 ## 二重ループ / The double loop
