@@ -14,7 +14,10 @@
    stub は、その言語で red が見えないときだけ、空の最小限で作る。
    - `[change]`: 新しく書かず、既存のテストの期待値を承認された新しい仕様に書き換える。古い実装のせいで落ちるのが正しい red。
    - `[remove]`: 既存のテストを消す。落とすテストは無いので、5・6 は「同じファイルの残りが緑のまま」の確認に置き換える。コードは消さない（green の仕事）。
-   Write only the test. A compile error is a valid red. `[change]` rewrites an existing expectation; `[remove]` deletes the test only.
+   - `[pin]`: 1 件で関数全体を固定してよい（テストは分岐・境界ごとに分ける）。期待値は対象を実際に動かした出力から写し、おかしな動きもそのまま写して報告に挙げる。
+     5・6 は「書いたテストが緑で、本体に差分が無い」の確認に置き換え、`[x]` にして green を飛ばす。
+   Write only the test. A compile error is a valid red. `[change]` rewrites an existing expectation; `[remove]` deletes the test only;
+   `[pin]` pins today's behaviour, must be green at once, and skips green.
 5. **書いたテスト 1 本だけを走らせ、落ちることを見る**（`one`。型の確認で red を見る項目なら、その確認を走らせる）。
 6. **落ちた理由が意図どおりか確かめる。** 書き間違い・準備の誤り・import の誤りで落ちているのは red ではない。テストを直して走らせ直す。
    Confirm it fails for the intended reason.
